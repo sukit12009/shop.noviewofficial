@@ -1,0 +1,94 @@
+# Clean Architecture Rules (Frontend)
+
+Follow these rules strictly when generating or modifying code.
+
+---
+
+## Architecture Layers
+
+UI (modules) → hooks → use-cases → repository (interface) → repository implementation → API
+
+---
+
+## UI Layer (modules/*/components)
+
+* Must be pure components
+* No API calls
+* No business logic
+* Receive data via props only
+
+Forbidden:
+
+* fetch / axios
+* calling use-cases directly
+
+---
+
+## Hooks Layer (modules/*/hooks)
+
+* Orchestrates logic
+* Must call use-cases only
+* Handles loading and error
+* Uses React Query
+
+Forbidden:
+
+* direct API calls
+
+---
+
+## Use-case Layer (core/use-cases)
+
+* Contains business logic
+* Depends only on repository interfaces
+* No React / Next.js
+
+---
+
+## Repository Layer
+
+* Interface in core/
+* Implementation in infrastructure/
+* Must map API response → domain entity
+
+---
+
+## Data Flow (MANDATORY)
+
+UI → hook → use-case → repository → API
+
+---
+
+## React Query
+
+* Query key:
+  ['resource', { params }]
+
+* Default:
+  staleTime: 5 minutes
+  retry: 1
+
+---
+
+## Error Handling
+
+* If API returns error → throw
+* Handle errors only in hooks
+* UI shows generic message
+
+---
+
+## Forbidden
+
+* Cross-layer imports
+* API in UI
+* Business logic in components
+* Raw API data in UI
+
+---
+
+## Output
+
+* Clean
+* Maintainable
+* Follow structure strictly
