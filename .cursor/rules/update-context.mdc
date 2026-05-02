@@ -1,0 +1,23 @@
+---
+description: Keep context.md up-to-date after every code change in this project
+alwaysApply: true
+---
+
+# Update context.md After Every Code Change
+
+After making any code change to this project, update `context.md` in the project root to reflect the current state.
+
+## What to update
+
+- **"อัปเดตล่าสุด"** date at the top of the file
+- **Directory Structure** section — add/remove files as needed
+- **Current State & Known Gaps** table — mark items ✅ when completed, add new ❌ items for new gaps discovered
+- **API Contract** — add new endpoints when implemented
+- **Cart Store** / any other sections — update if the relevant feature changes
+- **Previous Work Sessions** — add a new bullet for the current chat session UUID when significant work is done
+
+## Rules
+
+- Do NOT rewrite the entire file from scratch — make targeted edits only
+- Keep the file in Thai where it already uses Thai; new content can be Thai or English
+- The file lives at `context.md` in the project root

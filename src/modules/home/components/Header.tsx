@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useAuthStore } from '../../../shared/store/auth-store';
 
 interface User {
   name: string;
@@ -95,12 +96,13 @@ export function Header({ cartCount, user }: HeaderProps) {
   const [lang, setLang] = useState<'TH' | 'EN'>('TH');
   const [langOpen, setLangOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const logout = useAuthStore((s) => s.logout);
 
   return (
     <header className="sticky top-0 z-50 border-b border-gray-100 bg-white shadow-sm">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-6 px-4">
         {/* Logo */}
-        <a href="/" className="flex-shrink-0">
+        <a href="/" className="flex-shrink-0" suppressHydrationWarning>
           <span className="text-xl font-black tracking-[0.25em] text-gray-900">
             NOVIEW
           </span>
@@ -113,6 +115,7 @@ export function Header({ cartCount, user }: HeaderProps) {
               key={label}
               href="#"
               className="text-sm font-semibold tracking-widest text-gray-600 transition-colors hover:text-black"
+              suppressHydrationWarning
             >
               {label}
             </a>
@@ -150,14 +153,22 @@ export function Header({ cartCount, user }: HeaderProps) {
               <span className="text-sm font-medium text-gray-700">
                 {user.name}
               </span>
+              <button
+                type="button"
+                onClick={logout}
+                className="text-xs font-semibold tracking-widest text-gray-400 transition-colors hover:text-black"
+              >
+                LOGOUT
+              </button>
             </div>
           ) : (
-            <button
-              type="button"
+            <a
+              href="/login"
               className="hidden text-sm font-semibold tracking-widest text-gray-600 transition-colors hover:text-black md:block"
+              suppressHydrationWarning
             >
               LOGIN
-            </button>
+            </a>
           )}
 
           {/* Cart */}
@@ -227,6 +238,7 @@ export function Header({ cartCount, user }: HeaderProps) {
               key={label}
               href="#"
               className="block px-6 py-4 text-sm font-semibold tracking-widest text-gray-700 transition-colors hover:bg-gray-50"
+              suppressHydrationWarning
             >
               {label}
             </a>

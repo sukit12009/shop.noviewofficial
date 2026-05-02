@@ -75,6 +75,7 @@ export function Footer() {
                   <a
                     href={link.href}
                     className="transition-colors hover:text-gray-900"
+                    suppressHydrationWarning
                   >
                     {link.label}
                   </a>
@@ -97,6 +98,7 @@ export function Footer() {
                   rel="noopener noreferrer"
                   aria-label={label}
                   className="text-gray-400 transition-colors hover:text-gray-900"
+                  suppressHydrationWarning
                 >
                   <Icon />
                 </a>

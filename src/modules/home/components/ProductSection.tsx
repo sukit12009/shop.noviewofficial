@@ -46,6 +46,7 @@ export function ProductSection({ title, products, isLoading }: ProductSectionPro
             <a
               href="/shop"
               className="inline-block rounded-full border-2 border-black px-12 py-3 text-sm font-bold tracking-[0.2em] text-black transition-colors hover:bg-black hover:text-white"
+              suppressHydrationWarning
             >
               VIEW ALL
             </a>

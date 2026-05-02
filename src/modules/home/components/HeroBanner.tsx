@@ -101,6 +101,7 @@ export function HeroBanner({ banners, isLoading = false }: HeroBannerProps) {
               <a
                 href={banner.linkUrl}
                 className="mt-8 inline-block rounded-full bg-white px-8 py-3 text-sm font-bold tracking-[0.2em] text-black transition-colors hover:bg-gray-100"
+                suppressHydrationWarning
               >
                 SHOP NOW
               </a>

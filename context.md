@@ -1,0 +1,216 @@
+# Noview Shop — Project Context
+
+> อัปเดตล่าสุด: 2026-05-03 (login system)
+>
+> ไฟล์นี้สรุป context ทั้งหมดของโปรเจค ให้อ่านก่อนเริ่มทำงานทุกครั้ง
+
+---
+
+## Overview
+
+**Noview Shop** คือ e-commerce storefront สำหรับ NADAO Official ที่ขาย merchandise และ official goods ของศิลปิน (เช่น TADA, BUS) ปัจจุบันอยู่ในช่วง development โดยใช้ mock data แทน real API
+
+---
+
+## Tech Stack
+
+| Layer | Technology |
+|---|---|
+| Framework | Next.js 15 (App Router) |
+| UI Library | React 19 |
+| Language | TypeScript 5 |
+| Styling | Tailwind CSS 3.4 |
+| Data Fetching | TanStack Query v5 (React Query) |
+| State Management | Zustand v5 (cart) |
+| Font | Inter (Google Fonts) |
+
+---
+
+## Architecture
+
+โปรเจคใช้ **Clean Architecture** ที่กำหนดไว้ใน `.cursor/rules/clean-architecture.mdc`
+
+### Layer Flow (บังคับ)
+
+```
+UI (components) → hooks → use-cases → repository interface → repository impl → API
+```
+
+### Layer Rules
+
+- **UI (`modules/*/components`)** — pure components รับ data ผ่าน props เท่านั้น ห้าม fetch, ห้าม business logic
+- **Hooks (`modules/*/hooks`)** — orchestrate logic ผ่าน use-cases + React Query
+- **Use-cases (`core/use-cases`)** — business logic순수 ไม่มี React/Next.js
+- **Repository interface (`core/repositories`)** — abstract contract
+- **Repository impl (`infrastructure/repositories`)** — map API response → domain entity
+- **API Client (`infrastructure/api/api-client.ts`)** — base URL จาก `NEXT_PUBLIC_API_URL` (default: `http://localhost:8080/api/v1`)
+
+---
+
+## Directory Structure
+
+```
+src/
+├── app/
+│   ├── layout.tsx          # Root layout — Inter font, Providers wrapper
+│   ├── page.tsx            # Home page (client component)
+│   └── globals.css
+│
+├── core/
+│   ├── entities/
+│   │   ├── banner.ts       # Banner { id, title, subtitle, imageUrl, linkUrl }
+│   │   ├── product.ts      # Product { id, name, description, price, imageUrl, stock, category, isNew }
+│   │   ├── official-good.ts # OfficialGood { id, name, price, imageUrl, isSoldOut }
+│   │   └── user.ts         # User { id, name, email, avatarUrl? }
+│   ├── repositories/
+│   │   ├── banner-repository.ts
+│   │   ├── product-repository.ts  # GetProductsParams, GetProductsResult
+│   │   ├── official-good-repository.ts
+│   │   └── auth-repository.ts     # loginWithEmail, loginWithProvider, logout
+│   └── use-cases/
+│       ├── get-banners.ts
+│       ├── get-products.ts
+│       ├── get-official-goods.ts
+│       ├── login-with-email.ts    # validates + calls authRepository.loginWithEmail
+│       └── login-with-provider.ts # calls authRepository.loginWithProvider
+│
+├── infrastructure/
+│   ├── api/
+│   │   └── api-client.ts   # apiFetch wrapper, ApiResponse<T> type
+│   └── repositories/
+│       ├── mock-banner-repository.ts          # 3 mock banners (Unsplash images)
+│       ├── mock-product-repository.ts         # mock products
+│       ├── mock-official-good-repository.ts   # 8 mock official goods
+│       ├── mock-auth-repository.ts            # mock users: test@example.com/password123, admin@noview.co/admin1234 + social mock
+│       └── product-repository-impl.ts         # Real API impl (GET /products?page=&limit=)
+│
+├── modules/
+│   ├── home/
+│   │   ├── components/
+│   │   │   ├── Header.tsx           # Sticky header: logo, nav (SHOP/ARTIST/NEWS), search, cart badge, language switcher (TH/EN), mobile hamburger, LOGIN link / user avatar + LOGOUT
+│   │   │   ├── HeroBanner.tsx       # Full-height slider (auto-rotate 5s), dot indicators, arrow nav
+│   │   │   ├── ProductSection.tsx   # "TADA MERCH" grid section (uses HomeProductCard)
+│   │   │   ├── HomeProductCard.tsx  # Product card with hover zoom, badge
+│   │   │   ├── OfficialGoodsSection.tsx # "NADAO OFFICIAL GOODS" grid section
+│   │   │   └── ProductCardV2.tsx    # Official goods card: favorite heart toggle, sold-out overlay
+│   │   ├── hooks/
+│   │   │   ├── use-banner-list.ts   # React Query ['banners']
+│   │   │   └── use-official-goods.ts # React Query ['official-goods'] + local favorites state
+│   │   └── presenters/
+│   │       ├── banner-presenter.ts        # → BannerViewModel
+│   │       └── official-good-presenter.ts # → OfficialGoodViewModel (formatPrice THB)
+│   │
+│   ├── auth/
+│   │   ├── components/
+│   │   │   └── LoginPage.tsx  # Full login page: email/password form, Facebook/Google social login, blobs bg, app download bar
+│   │   └── hooks/
+│   │       └── use-login.ts   # useMutation for loginWithEmail + loginWithProvider, sets auth-store on success, redirect to /
+│   │
+│   ├── product/
+│   │   ├── components/
+│   │   │   ├── ProductCard.tsx   # General product card (used in /shop page — not yet built)
+│   │   │   └── ProductList.tsx   # Grid list wrapper
+│   │   ├── hooks/
+│   │   │   └── use-product-list.ts  # React Query ['products', { page, limit }]
+│   │   └── presenters/
+│   │       └── product-presenter.ts  # → ProductViewModel (badge: NEW / Low Stock)
+│   │
+│   └── layout/
+│       └── components/
+│           └── Footer.tsx  # Logo "ketchup", Terms/Contact links, social icons (Twitter/FB/IG), copyright 2023
+│
+├── shared/
+│   ├── hooks/
+│   │   └── use-cart.ts    # SSR-safe cart item count hook (mounted guard)
+│   └── store/
+│       ├── cart-store.ts  # Zustand persist store → localStorage 'cart-storage'
+│       └── auth-store.ts  # Zustand persist store → localStorage 'auth-storage' — user: User | null, setUser, logout
+│
+└── lib/
+    ├── providers.tsx       # QueryClientProvider + ReactQueryDevtools
+    └── query-client.ts     # QueryClient singleton (browser) / new instance (server)
+```
+
+---
+
+## Home Page (`/`)
+
+`src/app/page.tsx` เป็น client component ที่ compose ทุก section:
+
+```
+Header (cartCount)
+HeroBanner (banners, isLoading)
+ProductSection "TADA MERCH" (products[0–7])
+OfficialGoodsSection "NADAO OFFICIAL GOODS" (goods, favorites, toggleFavorite)
+Footer
+```
+
+---
+
+## API Contract
+
+Base URL: `NEXT_PUBLIC_API_URL` (default `http://localhost:8080/api/v1`)
+
+Response envelope:
+```ts
+interface ApiResponse<T> {
+  data: T;
+  error: { code: string; message: string } | null;
+  meta: { page: number; total: number };
+}
+```
+
+Implemented endpoint:
+- `GET /products?page=&limit=` → `ProductApiItem[]`
+
+Banners และ OfficialGoods ยังใช้ mock repository อยู่ ยังไม่มี real endpoint
+
+---
+
+## Current State & Known Gaps
+
+| รายการ | สถานะ |
+|---|---|
+| Home page UI | ✅ สร้างแล้ว |
+| Header (nav, cart badge, lang switcher) | ✅ สร้างแล้ว |
+| Hero banner slider | ✅ สร้างแล้ว |
+| Product section (TADA MERCH) | ✅ สร้างแล้ว |
+| Official Goods section | ✅ สร้างแล้ว |
+| Cart store (Zustand) | ✅ scaffold แล้ว (ยังไม่มี add/remove actions) |
+| Product detail page | ❌ ยังไม่สร้าง |
+| Shop/listing page (`/shop`) | ❌ ยังไม่สร้าง |
+| Cart page | ❌ ยังไม่สร้าง |
+| Checkout flow | ❌ ยังไม่สร้าง |
+| Authentication/Login | ✅ Login page + mock auth สร้างแล้ว |
+| Real API integration (banners, goods) | ❌ ยังใช้ mock |
+| Cart add/remove/update actions | ❌ ยังไม่ implement |
+| `/placeholder.png` public asset | ❌ ยังไม่มีใน public/ |
+
+---
+
+## React Query Keys
+
+| Key | Data |
+|---|---|
+| `['banners']` | HeroBanner slides |
+| `['official-goods']` | Official goods grid |
+| `['products', { page, limit }]` | Product listing |
+
+Default: `staleTime: 5 min`, `retry: 1`, `refetchOnWindowFocus: false`
+
+---
+
+## Cart Store
+
+- Library: Zustand v5 + `devtools` + `persist`
+- localStorage key: `cart-storage`
+- State: `items: CartItem[]` (productId, name, price, imageUrl, quantity)
+- Actions: **ยังไม่ implement** — ต้องเพิ่ม addItem, removeItem, updateQuantity, clearCart
+
+---
+
+## Previous Work Sessions
+
+- [Initial project setup & architecture](59bbc82e-c20d-4ef0-a73a-48a6e73c553b) — ตั้งค่า Next.js, clean architecture, สร้าง entities/use-cases/repositories/components ทั้งหมดของ home page
+- [Context documentation](1ad0a47a-f3aa-4fc3-beb1-2288e79c780e) — สร้างไฟล์ context.md + update-context rule
+- [Login system](1ad0a47a-f3aa-4fc3-beb1-2288e79c780e) — สร้างระบบ login: User entity, AuthRepository, LoginUseCases, MockAuthRepository, auth-store (Zustand), useLogin hook, LoginPage component (/login route), เพิ่ม LOGOUT ใน Header
