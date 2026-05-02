@@ -31,8 +31,8 @@ export function ProductCardV2({
   onToggleFavorite,
 }: ProductCardV2Props) {
   return (
-    <div className="group relative flex flex-col rounded-2xl bg-white p-4 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md">
-      {/* Favorite Button */}
+    <div className="group relative flex flex-col rounded-2xl bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md">
+      {/* Favorite button — sits above the link */}
       <button
         type="button"
         aria-label={isFavorited ? 'Remove from favorites' : 'Add to favorites'}
@@ -44,44 +44,51 @@ export function ProductCardV2({
         <HeartIcon filled={isFavorited} />
       </button>
 
-      {/* Image Area */}
-      <div className="relative flex aspect-square items-center justify-center overflow-hidden rounded-xl bg-gray-50 p-6">
-        <Image
-          src={product.imageUrl || '/placeholder.png'}
-          alt={product.name}
-          fill
-          className={`object-contain p-6 transition-transform duration-500 group-hover:scale-105 ${
-            product.isSoldOut ? 'opacity-40' : ''
-          }`}
-          sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 20vw"
-        />
+      {/* Clickable link area */}
+      <a
+        href={`/products/${product.id}`}
+        className="flex flex-col p-4"
+        suppressHydrationWarning
+      >
+        {/* Image Area */}
+        <div className="relative flex aspect-square items-center justify-center overflow-hidden rounded-xl bg-gray-50 p-6">
+          <Image
+            src={product.imageUrl || '/placeholder.png'}
+            alt={product.name}
+            fill
+            className={`object-contain p-6 transition-transform duration-500 group-hover:scale-105 ${
+              product.isSoldOut ? 'opacity-40' : ''
+            }`}
+            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 20vw"
+          />
 
-        {/* Sold Out Overlay */}
-        {product.isSoldOut && (
-          <div className="absolute inset-0 flex items-center justify-center rounded-xl">
-            <span className="rounded-full border border-gray-400 bg-white/90 px-4 py-1.5 text-xs font-bold tracking-[0.2em] text-gray-500">
-              SOLD OUT
-            </span>
-          </div>
-        )}
-      </div>
+          {/* Sold Out Overlay */}
+          {product.isSoldOut && (
+            <div className="absolute inset-0 flex items-center justify-center rounded-xl">
+              <span className="rounded-full border border-gray-400 bg-white/90 px-4 py-1.5 text-xs font-bold tracking-[0.2em] text-gray-500">
+                SOLD OUT
+              </span>
+            </div>
+          )}
+        </div>
 
-      {/* Info */}
-      <div className="mt-4 space-y-1">
-        <h3
-          title={product.name}
-          className="line-clamp-2 text-sm font-medium leading-snug text-gray-800"
-        >
-          {product.name}
-        </h3>
-        <p
-          className={`text-sm font-bold ${
-            product.isSoldOut ? 'text-gray-400' : 'text-gray-900'
-          }`}
-        >
-          {product.formattedPrice}
-        </p>
-      </div>
+        {/* Info */}
+        <div className="mt-4 space-y-1">
+          <h3
+            title={product.name}
+            className="line-clamp-2 text-sm font-medium leading-snug text-gray-800"
+          >
+            {product.name}
+          </h3>
+          <p
+            className={`text-sm font-bold ${
+              product.isSoldOut ? 'text-gray-400' : 'text-gray-900'
+            }`}
+          >
+            {product.formattedPrice}
+          </p>
+        </div>
+      </a>
     </div>
   );
 }

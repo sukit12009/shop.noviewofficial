@@ -47,4 +47,13 @@ export class ProductRepositoryImpl implements ProductRepository {
       page: response.meta.page,
     };
   }
+
+  async getProductById(id: string): Promise<Product | null> {
+    try {
+      const response = await apiClient.get<ProductApiItem>(`/products/${id}`);
+      return toProduct(response.data);
+    } catch {
+      return null;
+    }
+  }
 }

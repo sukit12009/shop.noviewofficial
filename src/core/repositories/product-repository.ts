@@ -13,4 +13,5 @@ export interface GetProductsResult {
 
 export interface ProductRepository {
   getProducts(params: GetProductsParams): Promise<GetProductsResult>;
+  getProductById(id: string): Promise<Product | null>;
 }

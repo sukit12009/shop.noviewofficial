@@ -1,6 +1,6 @@
 # Noview Shop — Project Context
 
-> อัปเดตล่าสุด: 2026-05-03 (login system)
+> อัปเดตล่าสุด: 2026-05-03 (unified product route)
 >
 > ไฟล์นี้สรุป context ทั้งหมดของโปรเจค ให้อ่านก่อนเริ่มทำงานทุกครั้ง
 
@@ -59,30 +59,33 @@ src/
 ├── core/
 │   ├── entities/
 │   │   ├── banner.ts       # Banner { id, title, subtitle, imageUrl, linkUrl }
-│   │   ├── product.ts      # Product { id, name, description, price, imageUrl, stock, category, isNew }
-│   │   ├── official-good.ts # OfficialGood { id, name, price, imageUrl, isSoldOut }
+│   │   ├── product.ts      # Product { id, name, description, price, imageUrl, images?, stock, category, isNew, colors?, sizes?, details?, sizeChart? }
+│   │   ├── official-good.ts # OfficialGood { id, name, price, imageUrl, isSoldOut, images?, colors?, sizes?, details?, sizeChart? }
 │   │   └── user.ts         # User { id, name, email, avatarUrl? }
 │   ├── repositories/
 │   │   ├── banner-repository.ts
-│   │   ├── product-repository.ts  # GetProductsParams, GetProductsResult
+│   │   ├── product-repository.ts  # getProducts + getProductById
 │   │   ├── official-good-repository.ts
 │   │   └── auth-repository.ts     # loginWithEmail, loginWithProvider, logout
 │   └── use-cases/
 │       ├── get-banners.ts
 │       ├── get-products.ts
 │       ├── get-official-goods.ts
-│       ├── login-with-email.ts    # validates + calls authRepository.loginWithEmail
-│       └── login-with-provider.ts # calls authRepository.loginWithProvider
+│       ├── get-product-by-id.ts
+│       ├── get-official-good-by-id.ts
+│       ├── get-catalog-item.ts        # ลองหา product ก่อน fallback ไป official-good (ใช้กับ /products/[id])
+│       ├── login-with-email.ts
+│       └── login-with-provider.ts
 │
 ├── infrastructure/
 │   ├── api/
 │   │   └── api-client.ts   # apiFetch wrapper, ApiResponse<T> type
 │   └── repositories/
 │       ├── mock-banner-repository.ts          # 3 mock banners (Unsplash images)
-│       ├── mock-product-repository.ts         # mock products
+│       ├── mock-product-repository.ts         # 8 mock products (NADAO merchandise) with gallery images, colors, sizes, details
 │       ├── mock-official-good-repository.ts   # 8 mock official goods
 │       ├── mock-auth-repository.ts            # mock users: test@example.com/password123, admin@noview.co/admin1234 + social mock
-│       └── product-repository-impl.ts         # Real API impl (GET /products?page=&limit=)
+│       └── product-repository-impl.ts         # Real API impl (GET /products, GET /products/:id)
 │
 ├── modules/
 │   ├── home/
@@ -108,12 +111,18 @@ src/
 │   │
 │   ├── product/
 │   │   ├── components/
-│   │   │   ├── ProductCard.tsx   # General product card (used in /shop page — not yet built)
-│   │   │   └── ProductList.tsx   # Grid list wrapper
+│   │   │   ├── ProductCard.tsx      # General product card
+│   │   │   ├── ProductList.tsx      # Grid list wrapper
+│   │   │   ├── ProductImageGallery.tsx # Main image + thumbnails + lightbox
+│   │   │   ├── ProductInfo.tsx      # Right panel: color/size selector, quantity stepper, add to cart
+│   │   │   ├── ProductTabs.tsx      # รายละเอียด / ตารางขนาด tabs
+│   │   │   ├── RelatedProducts.tsx  # "คุณอาจจะชอบสิ่งนี้" section
+│   │   │   └── ProductDetailPage.tsx # Full detail page composition
 │   │   ├── hooks/
-│   │   │   └── use-product-list.ts  # React Query ['products', { page, limit }]
+│   │   │   ├── use-product-list.ts  # React Query ['products', { page, limit }]
+│   │   │   └── use-product-detail.ts # React Query ['product', id] — ใช้ GetCatalogItemUseCase (รองรับทั้ง product และ official-good IDs)
 │   │   └── presenters/
-│   │       └── product-presenter.ts  # → ProductViewModel (badge: NEW / Low Stock)
+│   │       └── product-presenter.ts  # ProductViewModel + ProductDetailViewModel
 │   │
 │   └── layout/
 │       └── components/
@@ -177,13 +186,14 @@ Banners และ OfficialGoods ยังใช้ mock repository อยู่ 
 | Product section (TADA MERCH) | ✅ สร้างแล้ว |
 | Official Goods section | ✅ สร้างแล้ว |
 | Cart store (Zustand) | ✅ scaffold แล้ว (ยังไม่มี add/remove actions) |
-| Product detail page | ❌ ยังไม่สร้าง |
+| Product detail page | ✅ สร้างแล้ว (`/products/[id]`) |
 | Shop/listing page (`/shop`) | ❌ ยังไม่สร้าง |
 | Cart page | ❌ ยังไม่สร้าง |
 | Checkout flow | ❌ ยังไม่สร้าง |
 | Authentication/Login | ✅ Login page + mock auth สร้างแล้ว |
 | Real API integration (banners, goods) | ❌ ยังใช้ mock |
-| Cart add/remove/update actions | ❌ ยังไม่ implement |
+| Cart add/remove/update actions | ✅ implement แล้วใน cart-store |
+| NADAO Official Goods detail page | ✅ สร้างแล้ว — ใช้ `/products/[id]` route เดียวกัน (via GetCatalogItemUseCase) |
 | `/placeholder.png` public asset | ❌ ยังไม่มีใน public/ |
 
 ---

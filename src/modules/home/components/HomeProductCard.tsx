@@ -7,7 +7,11 @@ interface HomeProductCardProps {
 
 export function HomeProductCard({ product }: HomeProductCardProps) {
   return (
-    <div className="group cursor-pointer">
+    <a
+      href={`/products/${product.id}`}
+      className="group block cursor-pointer"
+      suppressHydrationWarning
+    >
       {/* Image */}
       <div className="relative aspect-square overflow-hidden rounded-xl bg-gray-100">
         <Image
@@ -34,6 +38,6 @@ export function HomeProductCard({ product }: HomeProductCardProps) {
         </h3>
         <p className="text-sm font-bold text-gray-900">{product.formattedPrice}</p>
       </div>
-    </div>
+    </a>
   );
 }
