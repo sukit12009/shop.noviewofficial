@@ -1,0 +1,40 @@
+---
+description: Dynamic category system — add/modify categories only via MOCK_CATEGORIES config
+globs: src/**/{config,category}/**/*.{ts,tsx}
+alwaysApply: false
+---
+
+# Dynamic Category System
+
+## Adding a New Category
+
+Only edit `src/shared/config/categories.ts` — nothing else:
+
+```typescript
+export const MOCK_CATEGORIES: CategoryConfig[] = [
+  { id: '1', title: { TH: 'TADA MERCH',          EN: 'TADA MERCH' },          dataSource: 'products' },
+  { id: '2', title: { TH: 'NADAO OFFICIAL GOODS', EN: 'NADAO OFFICIAL GOODS' }, dataSource: 'official-goods' },
+  { id: '3', title: { TH: 'BUS COLLECTION',       EN: 'BUS COLLECTION' },       dataSource: 'products' },
+  // ← add here
+];
+```
+
+After adding, the category will automatically appear:
+- **Home page** — as a new `<CategorySection>` (via `src/modules/home/components/CategorySection.tsx`)
+- **Category page** — routed at `/category/[id]` (via `src/app/category/[id]/page.tsx`)
+
+## Data Sources
+
+| `dataSource` | Fetches from |
+|---|---|
+| `'products'` | `useProductList` hook |
+| `'official-goods'` | `useOfficialGoods` hook |
+
+To add a new data source type, update `DataSource` in `categories.ts` and add a branch in `src/modules/category/hooks/useCategoryItems.ts`.
+
+## Rules
+
+- **Never** hardcode category IDs or titles in components
+- **Never** use `if (categoryId === '1')` — read from `getCategoryById(id)` instead
+- Category titles are defined in config, NOT in `translations.ts`
+- The home page uses `MOCK_CATEGORIES.map(...)` — order in the array = display order on home

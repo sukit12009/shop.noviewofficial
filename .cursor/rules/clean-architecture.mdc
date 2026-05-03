@@ -1,3 +1,9 @@
+---
+description: Clean Architecture layer rules — enforce separation of UI, hooks, use-cases, repository
+globs: src/**/*.{ts,tsx}
+alwaysApply: false
+---
+
 # Clean Architecture Rules (Frontend)
 
 Follow these rules strictly when generating or modifying code.

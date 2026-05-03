@@ -1,0 +1,52 @@
+---
+description: i18n conventions — always use useT() hook, never hardcode UI strings
+globs: src/**/*.tsx
+alwaysApply: false
+---
+
+# i18n Conventions (TH / EN)
+
+## Always Use `useT()`
+
+```typescript
+// ✅ GOOD
+const t = useT();
+return <button>{t.cart.addToCart}</button>;
+
+// ❌ BAD — hardcoded string
+return <button>เพิ่มลงตะกร้า</button>;
+```
+
+## Adding New Strings
+
+1. Add key to **both** `TH` and `EN` objects in `src/shared/i18n/translations.ts`
+2. Use the key via `useT()` in the component
+
+```typescript
+// translations.ts
+export const translations = {
+  TH: {
+    mySection: {
+      myKey: 'ข้อความภาษาไทย',
+    },
+  },
+  EN: {
+    mySection: {
+      myKey: 'English text',
+    },
+  },
+};
+```
+
+## Language Toggle
+
+- Language state lives in `useLangStore` (`shared/store/lang-store.ts`)
+- Supported langs: `'TH' | 'EN'`
+- To read current lang: `const lang = useLangStore((s) => s.lang)`
+- To switch: `useLangStore.getState().setLang('EN')`
+
+## Rules
+
+- `useT()` only works in **client components** (`'use client'`)
+- Category titles are NOT in `translations.ts` — they live in `MOCK_CATEGORIES` config
+- Never put hardcoded Thai or English UI strings in components

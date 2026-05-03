@@ -1,0 +1,49 @@
+---
+description: Zustand store patterns — persist, devtools, hydration-safe hooks
+globs: src/**/{store,hooks}/*.{ts,tsx}
+alwaysApply: false
+---
+
+# Zustand Store Patterns
+
+## Store Structure
+
+All stores use `persist` + `devtools` middleware:
+
+```typescript
+export const useXxxStore = create<XxxState>()(
+  devtools(
+    persist(
+      (set) => ({ /* state */ }),
+      { name: 'xxx-storage' },   // localStorage key
+    ),
+    { name: 'XxxStore' },        // devtools label
+  ),
+);
+```
+
+## Hydration-Safe Hooks
+
+Client components that read persisted state must guard against SSR/hydration mismatch:
+
+```typescript
+const [mounted, setMounted] = useState(false);
+useEffect(() => { setMounted(true); }, []);
+
+const safeValue = mounted ? storeValue : defaultValue;
+```
+
+## Existing Stores
+
+| Store | File | localStorage key |
+|-------|------|-----------------|
+| Cart | `shared/store/cart-store.ts` | `cart-storage` |
+| Auth | `shared/store/auth-store.ts` | `auth-storage` |
+| Shipping | `shared/store/shipping-store.ts` | `shipping-storage` |
+| Language | `shared/store/lang-store.ts` | `lang-storage` |
+
+## Rules
+
+- Never call `localStorage` directly — use Zustand persist
+- Never add state to component that belongs in a store
+- Export store hook directly (`useXxxStore`), wrap for hydration safety in `shared/hooks/`
