@@ -6,6 +6,8 @@ import Image from 'next/image';
 import { useAuthStore } from '@/shared/store/auth-store';
 import { useShippingStore } from '@/shared/store/shipping-store';
 import { useT } from '@/shared/hooks/use-t';
+import { useWishlistItems } from '@/shared/hooks/use-wishlist-items';
+import { CategoryProductCard } from '@/modules/category/components/CategoryProductCard';
 import type { ShippingAddress } from '@/shared/store/shipping-store';
 
 type Tab = 'information' | 'wishlist' | 'history';
@@ -133,6 +135,7 @@ export function ProfilePage() {
   const logout = useAuthStore((s) => s.logout);
   const shippingAddress = useShippingStore((s) => s.address);
   const setShippingAddress = useShippingStore((s) => s.setAddress);
+  const { items: wishlistItems, isLoading: wishlistLoading } = useWishlistItems();
   const t = useT();
 
   if (!user) {
@@ -151,7 +154,7 @@ export function ProfilePage() {
 
   const TABS: { key: Tab; label: string }[] = [
     { key: 'information', label: t.profile.tabInformation },
-    { key: 'wishlist', label: t.profile.tabWishlist(0) },
+    { key: 'wishlist', label: t.profile.tabWishlist(wishlistItems.length) },
     { key: 'history', label: t.profile.tabHistory },
   ];
 
@@ -268,8 +271,28 @@ export function ProfilePage() {
             )}
 
             {activeTab === 'wishlist' && (
-              <div className="flex min-h-[200px] items-center justify-center">
-                <p className="text-sm text-gray-400">{t.profile.emptyWishlist}</p>
+              <div className="py-6">
+                {wishlistLoading ? (
+                  <div className="grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-4">
+                    {Array.from({ length: 4 }).map((_, i) => (
+                      <div key={i} className="space-y-3">
+                        <div className="aspect-square animate-pulse rounded-xl bg-gray-200" />
+                        <div className="h-3 w-3/4 animate-pulse rounded-full bg-gray-200" />
+                        <div className="h-3 w-1/2 animate-pulse rounded-full bg-gray-200" />
+                      </div>
+                    ))}
+                  </div>
+                ) : wishlistItems.length === 0 ? (
+                  <div className="flex min-h-[200px] items-center justify-center">
+                    <p className="text-sm text-gray-400">{t.profile.emptyWishlist}</p>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-4">
+                    {wishlistItems.map((item) => (
+                      <CategoryProductCard key={item.id} item={item} />
+                    ))}
+                  </div>
+                )}
               </div>
             )}
 
