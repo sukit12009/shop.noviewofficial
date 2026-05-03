@@ -3,16 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useAuthStore } from '../../../shared/store/auth-store';
-
-interface User {
-  name: string;
-  avatarUrl?: string;
-}
-
-interface HeaderProps {
-  cartCount: number;
-  user?: User;
-}
+import { useCart } from '../../../shared/hooks/use-cart';
 
 function SearchIcon() {
   return (
@@ -93,11 +84,13 @@ function MenuIcon() {
 
 const NAV_LINKS = ['SHOP', 'ARTIST', 'NEWS'] as const;
 
-export function Header({ cartCount, user }: HeaderProps) {
+export function Header() {
   const [lang, setLang] = useState<'TH' | 'EN'>('TH');
   const [langOpen, setLangOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const logout = useAuthStore((s) => s.logout);
+  const user = useAuthStore((s) => s.user);
+  const { itemCount: cartCount } = useCart();
 
   return (
     <header className="sticky top-0 z-50 border-b border-gray-100 bg-white shadow-sm">
