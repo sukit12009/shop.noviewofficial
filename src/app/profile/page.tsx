@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import { ProfilePage } from '@/modules/profile/components/ProfilePage';
 
 export const metadata = {
@@ -5,5 +6,9 @@ export const metadata = {
 };
 
 export default function Page() {
-  return <ProfilePage />;
+  return (
+    <Suspense>
+      <ProfilePage />
+    </Suspense>
+  );
 }
