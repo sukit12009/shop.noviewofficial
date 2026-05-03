@@ -138,23 +138,28 @@ export function Header() {
           {/* User */}
           {user ? (
             <div className="hidden items-center gap-2 md:flex">
-              <div className="flex h-8 w-8 items-center justify-center overflow-hidden rounded-full bg-gray-200">
-                {user.avatarUrl ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
-                    src={user.avatarUrl}
-                    alt={user.name}
-                    className="h-full w-full object-cover"
-                  />
-                ) : (
-                  <span className="text-xs font-bold text-gray-600">
-                    {user.name[0].toUpperCase()}
-                  </span>
-                )}
-              </div>
-              <span className="text-sm font-medium text-gray-700">
-                {user.name}
-              </span>
+              <Link
+                href="/profile"
+                className="flex items-center gap-2 transition-opacity hover:opacity-80"
+              >
+                <div className="flex h-8 w-8 items-center justify-center overflow-hidden rounded-full bg-gray-200">
+                  {user.avatarUrl ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={user.avatarUrl}
+                      alt={user.name}
+                      className="h-full w-full object-cover"
+                    />
+                  ) : (
+                    <span className="text-xs font-bold text-gray-600">
+                      {user.name[0].toUpperCase()}
+                    </span>
+                  )}
+                </div>
+                <span className="text-sm font-medium text-gray-700">
+                  {user.name}
+                </span>
+              </Link>
               <button
                 type="button"
                 onClick={logout}
