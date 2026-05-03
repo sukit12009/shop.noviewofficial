@@ -200,7 +200,7 @@ Banners และ OfficialGoods ยังใช้ mock repository อยู่ 
 | Cart variant tracking (color/size) | ✅ CartItem มี color/size + variantKey เป็น unique key ต่อ cart line |
 | Payment gateway | ❌ handleConfirm ยังเป็น alert() |
 | Order entity + history | ❌ ไม่มี Order entity/repository — profile history tab ว่าง |
-| Search functionality | ❌ ปุ่ม search ใน Header ยังไม่ทำอะไร |
+| Search functionality | ✅ `/search?q=` — ค้นหาชื่อสินค้าจากทั้ง products + official-goods |
 | ARTIST / NEWS pages | ❌ nav links ชี้ไป `#` |
 
 ---

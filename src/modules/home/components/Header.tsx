@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useAuthStore } from '../../../shared/store/auth-store';
 import { useCart } from '../../../shared/hooks/use-cart';
 import { useLangStore } from '../../../shared/store/lang-store';
@@ -88,6 +89,7 @@ export function Header() {
   const [langOpen, setLangOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
+  const router = useRouter();
   const logout = useAuthStore((s) => s.logout);
   const user = useAuthStore((s) => s.user);
   const { itemCount: cartCount } = useCart();
@@ -130,6 +132,7 @@ export function Header() {
           <button
             type="button"
             aria-label={t.nav.searchAriaLabel}
+            onClick={() => router.push('/search')}
             className="p-1.5 text-gray-600 transition-colors hover:text-black"
           >
             <SearchIcon />

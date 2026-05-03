@@ -121,6 +121,16 @@ export const translations = {
       add: 'เพิ่มในรายการโปรด',
       remove: 'ลบออกจากรายการโปรด',
     },
+    // Search page
+    search: {
+      breadcrumbHome: 'หน้าแรก',
+      title: 'ค้นหาสินค้า',
+      placeholder: 'ค้นหาชื่อสินค้า...',
+      searchBtn: 'ค้นหา',
+      showing: (n: number, q: string) => `พบ ${n} รายการสำหรับ "${q}"`,
+      noResults: (q: string) => `ไม่พบสินค้าที่ตรงกับ "${q}"`,
+      emptyQuery: 'พิมพ์ชื่อสินค้าที่ต้องการค้นหา',
+    },
     // Category page UI — titles come from src/shared/config/categories.ts
     category: {
       breadcrumbHome: 'หน้าแรก',
@@ -262,6 +272,16 @@ export const translations = {
     wishlist: {
       add: 'Add to wishlist',
       remove: 'Remove from wishlist',
+    },
+    // Search page
+    search: {
+      breadcrumbHome: 'Home',
+      title: 'Search',
+      placeholder: 'Search products...',
+      searchBtn: 'Search',
+      showing: (n: number, q: string) => `${n} result${n !== 1 ? 's' : ''} for "${q}"`,
+      noResults: (q: string) => `No products found for "${q}"`,
+      emptyQuery: 'Type a product name to search',
     },
     // Category
     category: {
