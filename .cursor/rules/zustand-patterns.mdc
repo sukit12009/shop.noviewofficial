@@ -43,8 +43,21 @@ const safeValue = mounted ? storeValue : defaultValue;
 | Language | `shared/store/lang-store.ts` | `noview-shop-lang-storage` |
 | Wishlist | `shared/store/wishlist-store.ts` | `noview-shop-wishlist-storage` |
 
+## Shared Hooks (wrapping stores)
+
+Don't consume stores directly in components when a wrapper hook already exists:
+
+| Hook | File | Purpose |
+|------|------|---------|
+| `useCart()` | `shared/hooks/use-cart.ts` | Hydration-safe cart count + actions |
+| `useWishlist()` | `shared/hooks/use-wishlist.ts` | Auth-gated wishlist per user → redirects to `/login` |
+| `useWishlistItems()` | `shared/hooks/use-wishlist-items.ts` | Resolves full `CategoryItem[]` from wishlist IDs |
+| `useT()` | `shared/hooks/use-t.ts` | Current language translations |
+
 ## Rules
 
 - Never call `localStorage` directly — use Zustand persist
 - Never add state to component that belongs in a store
 - Export store hook directly (`useXxxStore`), wrap for hydration safety in `shared/hooks/`
+- Prefer shared hooks over direct store access in components
+- All localStorage keys must be prefixed with `noview-shop-`

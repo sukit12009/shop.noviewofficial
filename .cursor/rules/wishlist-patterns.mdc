@@ -1,0 +1,52 @@
+---
+description: Wishlist patterns — auth-gated hook, per-user persistence, resolving item data
+globs: src/**/*.{ts,tsx}
+alwaysApply: false
+---
+
+# Wishlist Patterns
+
+## Always Use `useWishlist()` — Never Access Store Directly
+
+```typescript
+// ✅ GOOD
+const { has, toggle, ids, isAuthenticated } = useWishlist();
+
+// ❌ BAD — bypasses auth check and userId scoping
+const ids = useWishlistStore((s) => s.map['some-id']);
+```
+
+## Auth Gate
+
+`toggle()` from `useWishlist()` automatically redirects to `/login` if the user is not authenticated. No extra auth check needed in components.
+
+```typescript
+<button onClick={() => toggle(item.id)}>♥</button>
+// → if not logged in: router.push('/login')
+// → if logged in: toggles wishlist for current user
+```
+
+## Per-User Storage
+
+The wishlist store (`wishlist-store.ts`) uses `map: Record<userId, string[]>`:
+- Logged-in users get their own wishlist slot keyed by `user.id`
+- Guests use the key `'guest'`
+- Logging out preserves the user's wishlist for next login
+
+## Displaying Wishlist Items
+
+Use `useWishlistItems()` to resolve full product data from IDs:
+
+```typescript
+const { items, isLoading } = useWishlistItems();
+// items: CategoryItem[] — ready for <CategoryProductCard>
+```
+
+Used in: `src/modules/profile/components/ProfilePage.tsx` (wishlist tab)
+
+## Wishlist Count
+
+```typescript
+const { ids } = useWishlist();
+// ids.length = number of items in wishlist for current user
+```

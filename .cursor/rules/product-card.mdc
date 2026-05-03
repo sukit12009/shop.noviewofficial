@@ -1,0 +1,45 @@
+---
+description: Shared product card — use CategoryProductCard everywhere, never create new card variants
+globs: src/**/*.tsx
+alwaysApply: false
+---
+
+# Shared Product Card
+
+## Single Source of Truth
+
+`src/modules/category/components/CategoryProductCard.tsx` is the **only** product card component for all listing pages.
+
+```typescript
+import { CategoryProductCard } from '@/modules/category/components/CategoryProductCard';
+
+// Works in home page, category page, profile wishlist — everywhere
+<CategoryProductCard item={item} />
+```
+
+Accepts `CategoryItem` from `src/modules/category/hooks/useCategoryItems.ts`.
+
+## What It Does Internally
+
+- **Navigation** — clicking the image navigates to `/products/${item.id}`
+- **Wishlist** — heart button uses `useWishlist()` (auth-gated, persisted)
+- **Badge** — shown if `item.badge` is set (e.g. `'NEW'`, `'Sold Out'`)
+
+## Navigation Pattern (Stretched Link on Image)
+
+Clicking the image (`<Link>` wrapping the image container) navigates to the product detail. The heart button inside uses `e.preventDefault() + e.stopPropagation()` to prevent navigation.
+
+```tsx
+<Link href={`/products/${item.id}`} className="relative block ...">
+  <Image ... />
+  <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggle(item.id); }}>
+    ♥
+  </button>
+</Link>
+```
+
+## Rules
+
+- **Never** create a new product card component — extend `CategoryProductCard` instead
+- **Never** pass `isFav`/`onToggleFav` as props — wishlist is handled internally
+- `CategoryItem` is the normalized type — all data sources must map to it via `useCategoryItems` or `useWishlistItems`
