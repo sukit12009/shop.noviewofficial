@@ -3,6 +3,7 @@ import type { OfficialGood } from '../../../core/entities/official-good';
 export interface OfficialGoodViewModel {
   id: string;
   name: string;
+  price: number;
   formattedPrice: string;
   imageUrl: string;
   isSoldOut: boolean;
@@ -20,6 +21,7 @@ export function presentOfficialGood(good: OfficialGood): OfficialGoodViewModel {
   return {
     id: good.id,
     name: good.name,
+    price: good.price,
     formattedPrice: formatPrice(good.price),
     imageUrl: good.imageUrl,
     isSoldOut: good.isSoldOut,

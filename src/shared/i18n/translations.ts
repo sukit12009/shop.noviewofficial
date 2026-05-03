@@ -117,6 +117,23 @@ export const translations = {
       loginRequired: 'กรุณาเข้าสู่ระบบเพื่อดูโปรไฟล์',
       loginBtn: 'เข้าสู่ระบบ',
     },
+    // Category page UI — titles come from src/shared/config/categories.ts
+    category: {
+      breadcrumbHome: 'หน้าแรก',
+      showing: (from: number, to: number, total: number) =>
+        `แสดง ${from}-${to} จาก ${total} รายการ`,
+      showLabel: 'แสดง',
+      sortLabel: 'เรียงโดย',
+      sortDefault: 'ค่าเริ่มต้น',
+      sortPriceAsc: 'ราคา: ต่ำ → สูง',
+      sortPriceDesc: 'ราคา: สูง → ต่ำ',
+      sortNewest: 'ใหม่ล่าสุด',
+      noProducts: 'ไม่พบสินค้า',
+      prevPage: 'ก่อนหน้า',
+      nextPage: 'ถัดไป',
+      addToCart: 'เพิ่มในตะกร้า',
+      added: '✓ เพิ่มแล้ว',
+    },
   },
 
   EN: {
@@ -237,6 +254,23 @@ export const translations = {
       emptyHistory: 'No order history yet.',
       loginRequired: 'Please log in to view your profile.',
       loginBtn: 'Log In',
+    },
+    // Category
+    category: {
+      breadcrumbHome: 'Home',
+      showing: (from: number, to: number, total: number) =>
+        `Showing ${from}-${to} of ${total} results`,
+      showLabel: 'Show',
+      sortLabel: 'Sort by',
+      sortDefault: 'Default',
+      sortPriceAsc: 'Price: Low to High',
+      sortPriceDesc: 'Price: High to Low',
+      sortNewest: 'Newest',
+      noProducts: 'No products found.',
+      prevPage: 'Prev',
+      nextPage: 'Next',
+      addToCart: 'Add to Cart',
+      added: '✓ Added',
     },
   },
 } as const;

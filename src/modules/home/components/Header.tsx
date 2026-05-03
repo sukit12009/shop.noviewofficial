@@ -96,9 +96,9 @@ export function Header() {
   const t = useT();
 
   const NAV_LINKS = [
-    { key: 'shop', label: t.nav.shop },
-    { key: 'artist', label: t.nav.artist },
-    { key: 'news', label: t.nav.news },
+    { key: 'shop', label: t.nav.shop, href: '/category/1?page=1' },
+    { key: 'artist', label: t.nav.artist, href: '#' },
+    { key: 'news', label: t.nav.news, href: '#' },
   ];
 
   return (
@@ -113,14 +113,14 @@ export function Header() {
 
         {/* Center Nav */}
         <nav className="hidden items-center gap-8 md:flex">
-          {NAV_LINKS.map(({ key, label }) => (
-            <a
+          {NAV_LINKS.map(({ key, label, href }) => (
+            <Link
               key={key}
-              href="#"
+              href={href}
               className="text-sm font-semibold tracking-widest text-gray-600 transition-colors hover:text-black"
             >
               {label}
-            </a>
+            </Link>
           ))}
         </nav>
 
@@ -239,14 +239,15 @@ export function Header() {
       {/* Mobile Nav Drawer */}
       {mobileOpen && (
         <div className="border-t border-gray-100 bg-white md:hidden">
-          {NAV_LINKS.map(({ key, label }) => (
-            <a
+          {NAV_LINKS.map(({ key, label, href }) => (
+            <Link
               key={key}
-              href="#"
+              href={href}
+              onClick={() => setMobileOpen(false)}
               className="block px-6 py-4 text-sm font-semibold tracking-widest text-gray-700 transition-colors hover:bg-gray-50"
             >
               {label}
-            </a>
+            </Link>
           ))}
         </div>
       )}
