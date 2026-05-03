@@ -7,6 +7,8 @@ import { useAuthStore } from '../../../shared/store/auth-store';
 import { useCart } from '../../../shared/hooks/use-cart';
 import { useLangStore } from '../../../shared/store/lang-store';
 import { useT } from '../../../shared/hooks/use-t';
+import { MOCK_CATEGORIES } from '../../../shared/config/categories';
+import type { Lang } from '../../../shared/store/lang-store';
 
 function SearchIcon() {
   return (
@@ -85,9 +87,14 @@ function MenuIcon() {
   );
 }
 
+function getCategoryTitle(title: Record<string, string>, lang: Lang): string {
+  return title[lang] ?? title['TH'] ?? title['EN'] ?? '';
+}
+
 export function Header() {
   const [langOpen, setLangOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [mobileShopOpen, setMobileShopOpen] = useState(false);
 
   const router = useRouter();
   const logout = useAuthStore((s) => s.logout);
@@ -97,8 +104,7 @@ export function Header() {
   const setLang = useLangStore((s) => s.setLang);
   const t = useT();
 
-  const NAV_LINKS = [
-    { key: 'shop', label: t.nav.shop, href: '/category/1?page=1' },
+  const OTHER_NAV = [
     { key: 'artist', label: t.nav.artist, href: '#' },
     { key: 'news', label: t.nav.news, href: '#' },
   ];
@@ -115,7 +121,35 @@ export function Header() {
 
         {/* Center Nav */}
         <nav className="hidden items-center gap-8 md:flex">
-          {NAV_LINKS.map(({ key, label, href }) => (
+          {/* SHOP with hover dropdown */}
+          <div className="group relative">
+            <button
+              type="button"
+              className="flex items-center gap-1 text-sm font-semibold tracking-widest text-gray-600 transition-colors group-hover:text-black"
+            >
+              {t.nav.shop}
+              <ChevronDownIcon />
+            </button>
+
+            {/* Dropdown — CSS-only hover, no JS state */}
+            <div className="invisible absolute left-0 top-full pt-2 opacity-0 transition-all duration-150 group-hover:visible group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto">
+              <div className="min-w-[220px] overflow-hidden rounded-xl border border-gray-100 bg-white shadow-xl">
+                {MOCK_CATEGORIES.map((cat) => (
+                  <Link
+                    key={cat.id}
+                    href={`/category/${cat.id}?page=1`}
+                    className="flex items-center gap-3 px-5 py-3.5 text-sm font-semibold tracking-wide text-gray-600 transition-colors hover:bg-orange-50 hover:text-orange-500"
+                  >
+                    <span className="h-1.5 w-1.5 flex-shrink-0 rounded-full bg-orange-400" />
+                    {getCategoryTitle(cat.title as Record<string, string>, lang)}
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Other nav links */}
+          {OTHER_NAV.map(({ key, label, href }) => (
             <Link
               key={key}
               href={href}
@@ -242,7 +276,35 @@ export function Header() {
       {/* Mobile Nav Drawer */}
       {mobileOpen && (
         <div className="border-t border-gray-100 bg-white md:hidden">
-          {NAV_LINKS.map(({ key, label, href }) => (
+          {/* SHOP — expandable */}
+          <button
+            type="button"
+            onClick={() => setMobileShopOpen((o) => !o)}
+            className="flex w-full items-center justify-between px-6 py-4 text-sm font-semibold tracking-widest text-gray-700 transition-colors hover:bg-gray-50"
+          >
+            {t.nav.shop}
+            <span className={`transition-transform duration-200 ${mobileShopOpen ? 'rotate-180' : ''}`}>
+              <ChevronDownIcon />
+            </span>
+          </button>
+          {mobileShopOpen && (
+            <div className="border-t border-gray-50 bg-orange-50/50">
+              {MOCK_CATEGORIES.map((cat) => (
+                <Link
+                  key={cat.id}
+                  href={`/category/${cat.id}?page=1`}
+                  onClick={() => setMobileOpen(false)}
+                  className="flex items-center gap-3 px-8 py-3.5 text-sm font-medium text-gray-600 transition-colors hover:text-orange-500"
+                >
+                  <span className="h-1.5 w-1.5 flex-shrink-0 rounded-full bg-orange-400" />
+                  {getCategoryTitle(cat.title as Record<string, string>, lang)}
+                </Link>
+              ))}
+            </div>
+          )}
+
+          {/* Other nav links */}
+          {OTHER_NAV.map(({ key, label, href }) => (
             <Link
               key={key}
               href={href}
