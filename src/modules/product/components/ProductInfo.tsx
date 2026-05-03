@@ -69,6 +69,8 @@ export function ProductInfo({ product }: ProductInfoProps) {
       price: product.price,
       imageUrl: product.imageUrl,
       quantity,
+      color: selectedColor ?? undefined,
+      size: selectedSize ?? undefined,
     });
     setAddedToCart(true);
     setTimeout(() => setAddedToCart(false), 2000);

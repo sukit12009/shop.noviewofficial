@@ -6,8 +6,8 @@ import type { CartItem } from '@/shared/store/cart-store';
 
 interface CartItemRowProps {
   item: CartItem;
-  onUpdateQuantity: (productId: string, quantity: number) => void;
-  onRemove: (productId: string) => void;
+  onUpdateQuantity: (variantKey: string, quantity: number) => void;
+  onRemove: (variantKey: string) => void;
 }
 
 export function CartItemRow({ item, onUpdateQuantity, onRemove }: CartItemRowProps) {
@@ -34,6 +34,11 @@ export function CartItemRow({ item, onUpdateQuantity, onRemove }: CartItemRowPro
           <p className="mt-0.5 text-sm font-semibold leading-snug text-gray-800">
             {item.name}
           </p>
+          {(item.color || item.size) && (
+            <p className="mt-0.5 text-xs text-gray-400">
+              {[item.color, item.size].filter(Boolean).join(' / ')}
+            </p>
+          )}
         </div>
 
         {/* Price */}
@@ -50,7 +55,7 @@ export function CartItemRow({ item, onUpdateQuantity, onRemove }: CartItemRowPro
           <div className="mt-0.5 flex items-center gap-0 rounded-md border border-gray-300 w-fit">
             <button
               type="button"
-              onClick={() => onUpdateQuantity(item.productId, item.quantity - 1)}
+              onClick={() => onUpdateQuantity(item.variantKey, item.quantity - 1)}
               className="flex h-8 w-8 items-center justify-center text-gray-500 transition hover:bg-gray-100"
               aria-label={t.cartItem.decreaseAriaLabel}
             >
@@ -61,7 +66,7 @@ export function CartItemRow({ item, onUpdateQuantity, onRemove }: CartItemRowPro
             </span>
             <button
               type="button"
-              onClick={() => onUpdateQuantity(item.productId, item.quantity + 1)}
+              onClick={() => onUpdateQuantity(item.variantKey, item.quantity + 1)}
               className="flex h-8 w-8 items-center justify-center text-gray-500 transition hover:bg-gray-100"
               aria-label={t.cartItem.increaseAriaLabel}
             >
@@ -80,7 +85,7 @@ export function CartItemRow({ item, onUpdateQuantity, onRemove }: CartItemRowPro
           </div>
           <button
             type="button"
-            onClick={() => onRemove(item.productId)}
+            onClick={() => onRemove(item.variantKey)}
             className="text-xs text-gray-400 underline transition hover:text-red-500 sm:mt-1 sm:block"
           >
             {t.cartItem.remove}

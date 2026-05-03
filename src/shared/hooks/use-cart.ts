@@ -8,8 +8,8 @@ interface UseCartResult {
   itemCount: number;
   items: CartItem[];
   subtotal: number;
-  updateQuantity: (productId: string, quantity: number) => void;
-  removeItem: (productId: string) => void;
+  updateQuantity: (variantKey: string, quantity: number) => void;
+  removeItem: (variantKey: string) => void;
   clearCart: () => void;
 }
 

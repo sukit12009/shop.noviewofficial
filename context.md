@@ -1,6 +1,6 @@
 # Noview Shop — Project Context
 
-> อัปเดตล่าสุด: 2026-05-03 (unified product route)
+> อัปเดตล่าสุด: 2026-05-03 (cleanup unused modules)
 >
 > ไฟล์นี้สรุป context ทั้งหมดของโปรเจค ให้อ่านก่อนเริ่มทำงานทุกครั้ง
 
@@ -181,20 +181,27 @@ Banners และ OfficialGoods ยังใช้ mock repository อยู่ 
 | รายการ | สถานะ |
 |---|---|
 | Home page UI | ✅ สร้างแล้ว |
-| Header (nav, cart badge, lang switcher) | ✅ สร้างแล้ว |
+| Header (nav, cart badge, lang switcher, mobile menu) | ✅ สร้างแล้ว |
 | Hero banner slider | ✅ สร้างแล้ว |
 | Product section (TADA MERCH) | ✅ สร้างแล้ว |
 | Official Goods section | ✅ สร้างแล้ว |
-| Cart store (Zustand) | ✅ scaffold แล้ว (ยังไม่มี add/remove actions) |
-| Product detail page | ✅ สร้างแล้ว (`/products/[id]`) |
-| Shop/listing page (`/shop`) | ❌ ยังไม่สร้าง |
-| Cart page | ❌ ยังไม่สร้าง |
-| Checkout flow | ❌ ยังไม่สร้าง |
+| Cart store (Zustand) + add/remove/updateQuantity/clearCart | ✅ implement แล้ว |
+| Product detail page (`/products/[id]`) | ✅ สร้างแล้ว |
+| NADAO Official Goods detail page | ✅ ใช้ `/products/[id]` route เดียวกัน (via GetCatalogItemUseCase) |
+| `/shop` page | ✅ redirect → `/category/1` |
+| Category listing page (`/category/[id]`) | ✅ สร้างแล้ว (sort, pagination, wishlist, add-to-cart) |
+| Checkout page (`/checkout`) | ✅ สร้างแล้ว (ShippingSection, CartItemRow, OrderSummary, coupon) |
 | Authentication/Login | ✅ Login page + mock auth สร้างแล้ว |
-| Real API integration (banners, goods) | ❌ ยังใช้ mock |
-| Cart add/remove/update actions | ✅ implement แล้วใน cart-store |
-| NADAO Official Goods detail page | ✅ สร้างแล้ว — ใช้ `/products/[id]` route เดียวกัน (via GetCatalogItemUseCase) |
-| `/placeholder.png` public asset | ❌ ยังไม่มีใน public/ |
+| Profile page (`/profile`) | ✅ สร้างแล้ว (info, wishlist tab, address modal) |
+| Wishlist system | ✅ wishlist-store + useWishlist + useWishlistItems |
+| i18n (TH/EN) | ✅ translations.ts ครอบคลุมทุก section |
+| Dynamic categories (`/category/[id]`) | ✅ MOCK_CATEGORIES config + useCategoryItems |
+| Real API integration (banners, goods) | ❌ ยังใช้ mock repository |
+| Cart variant tracking (color/size) | ✅ CartItem มี color/size + variantKey เป็น unique key ต่อ cart line |
+| Payment gateway | ❌ handleConfirm ยังเป็น alert() |
+| Order entity + history | ❌ ไม่มี Order entity/repository — profile history tab ว่าง |
+| Search functionality | ❌ ปุ่ม search ใน Header ยังไม่ทำอะไร |
+| ARTIST / NEWS pages | ❌ nav links ชี้ไป `#` |
 
 ---
 

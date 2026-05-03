@@ -98,7 +98,7 @@ export function CheckoutPage() {
                 <div className="divide-y divide-gray-100">
                   {items.map((item) => (
                     <CartItemRow
-                      key={item.productId}
+                      key={item.variantKey}
                       item={item}
                       onUpdateQuantity={updateQuantity}
                       onRemove={removeItem}
