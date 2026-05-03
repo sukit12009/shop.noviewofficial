@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import { useCartStore } from '@/shared/store/cart-store';
+import { useT } from '@/shared/hooks/use-t';
 import type { ProductViewModel } from '../presenters/product-presenter';
 
 interface ProductCardProps {
@@ -12,6 +13,7 @@ interface ProductCardProps {
 export function ProductCard({ product }: ProductCardProps) {
   const [added, setAdded] = useState(false);
   const addItem = useCartStore((s) => s.addItem);
+  const t = useT();
 
   function handleAddToCart() {
     addItem({
@@ -61,7 +63,7 @@ export function ProductCard({ product }: ProductCardProps) {
               : 'bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-500'
           }`}
         >
-          {added ? '✓ เพิ่มในตะกร้าแล้ว' : 'Add to Cart'}
+          {added ? t.products.addedToCart : t.products.addToCart}
         </button>
       </div>
     </div>

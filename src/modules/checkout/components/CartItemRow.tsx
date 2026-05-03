@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+import { useT } from '@/shared/hooks/use-t';
 import type { CartItem } from '@/shared/store/cart-store';
 
 interface CartItemRowProps {
@@ -11,6 +12,7 @@ interface CartItemRowProps {
 
 export function CartItemRow({ item, onUpdateQuantity, onRemove }: CartItemRowProps) {
   const totalPrice = item.price * item.quantity;
+  const t = useT();
 
   return (
     <div className="flex items-start gap-4 py-5">
@@ -28,7 +30,7 @@ export function CartItemRow({ item, onUpdateQuantity, onRemove }: CartItemRowPro
       {/* Product details */}
       <div className="flex flex-1 flex-col gap-3 sm:flex-row sm:items-center sm:gap-6">
         <div className="flex-1">
-          <p className="text-xs text-gray-400">สินค้า</p>
+          <p className="text-xs text-gray-400">{t.cartItem.productLabel}</p>
           <p className="mt-0.5 text-sm font-semibold leading-snug text-gray-800">
             {item.name}
           </p>
@@ -36,7 +38,7 @@ export function CartItemRow({ item, onUpdateQuantity, onRemove }: CartItemRowPro
 
         {/* Price */}
         <div className="text-left sm:w-28 sm:text-right">
-          <p className="text-xs text-gray-400">ราคา</p>
+          <p className="text-xs text-gray-400">{t.cartItem.price}</p>
           <p className="mt-0.5 text-sm font-semibold text-gray-800">
             ฿{item.price.toLocaleString()}
           </p>
@@ -44,13 +46,13 @@ export function CartItemRow({ item, onUpdateQuantity, onRemove }: CartItemRowPro
 
         {/* Quantity */}
         <div className="sm:w-32">
-          <p className="text-xs text-gray-400">จำนวน</p>
+          <p className="text-xs text-gray-400">{t.cartItem.quantity}</p>
           <div className="mt-0.5 flex items-center gap-0 rounded-md border border-gray-300 w-fit">
             <button
               type="button"
               onClick={() => onUpdateQuantity(item.productId, item.quantity - 1)}
               className="flex h-8 w-8 items-center justify-center text-gray-500 transition hover:bg-gray-100"
-              aria-label="ลดจำนวน"
+              aria-label={t.cartItem.decreaseAriaLabel}
             >
               −
             </button>
@@ -61,7 +63,7 @@ export function CartItemRow({ item, onUpdateQuantity, onRemove }: CartItemRowPro
               type="button"
               onClick={() => onUpdateQuantity(item.productId, item.quantity + 1)}
               className="flex h-8 w-8 items-center justify-center text-gray-500 transition hover:bg-gray-100"
-              aria-label="เพิ่มจำนวน"
+              aria-label={t.cartItem.increaseAriaLabel}
             >
               +
             </button>
@@ -71,7 +73,7 @@ export function CartItemRow({ item, onUpdateQuantity, onRemove }: CartItemRowPro
         {/* Total */}
         <div className="flex items-center justify-between sm:block sm:w-28 sm:text-right">
           <div>
-            <p className="text-xs text-gray-400">ราคารวม</p>
+            <p className="text-xs text-gray-400">{t.cartItem.total}</p>
             <p className="mt-0.5 text-sm font-semibold text-gray-800">
               ฿{totalPrice.toLocaleString()}
             </p>
@@ -81,7 +83,7 @@ export function CartItemRow({ item, onUpdateQuantity, onRemove }: CartItemRowPro
             onClick={() => onRemove(item.productId)}
             className="text-xs text-gray-400 underline transition hover:text-red-500 sm:mt-1 sm:block"
           >
-            ลบ
+            {t.cartItem.remove}
           </button>
         </div>
       </div>

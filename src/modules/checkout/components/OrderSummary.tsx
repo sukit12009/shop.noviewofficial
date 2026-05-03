@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useT } from '@/shared/hooks/use-t';
 
 interface OrderSummaryProps {
   subtotal: number;
@@ -81,16 +82,17 @@ export function OrderSummary({
 }: OrderSummaryProps) {
   const [couponCode, setCouponCode] = useState('');
   const total = subtotal + shippingFee - discount - pointDiscount;
+  const t = useT();
 
   return (
     <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
       <h2 className="mb-5 text-base font-bold text-gray-900">
-        สินค้าในตะกร้าของฉัน
+        {t.orderSummary.title}
       </h2>
 
       {/* Subtotal */}
       <div className="flex items-center justify-between text-sm">
-        <span className="text-gray-500">ราคารวม</span>
+        <span className="text-gray-500">{t.orderSummary.subtotal}</span>
         <span className="font-semibold text-gray-800">
           ฿{subtotal.toLocaleString()}
         </span>
@@ -98,7 +100,7 @@ export function OrderSummary({
 
       {/* Shipping */}
       <div className="mt-3 flex items-center justify-between text-sm">
-        <span className="text-gray-500">ค่าส่ง</span>
+        <span className="text-gray-500">{t.orderSummary.shipping}</span>
         <span className="font-semibold text-gray-800">
           {shippingFee === 0 ? '฿0' : `฿${shippingFee.toLocaleString()}`}
         </span>
@@ -111,7 +113,7 @@ export function OrderSummary({
             type="text"
             value={couponCode}
             onChange={(e) => setCouponCode(e.target.value)}
-            placeholder="บัตรของขวัญหรือรหัสส่วนลด"
+            placeholder={t.orderSummary.couponPlaceholder}
             className="flex-1 rounded-lg border border-gray-300 px-3 py-2.5 text-sm text-gray-800 outline-none transition focus:border-orange-400 focus:ring-2 focus:ring-orange-100"
           />
           <button
@@ -124,7 +126,7 @@ export function OrderSummary({
             }}
             className="flex-shrink-0 rounded-lg bg-gray-700 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-gray-900"
           >
-            ใช้ส่วนลด
+            {t.orderSummary.applyBtn}
           </button>
         </div>
       </div>
@@ -132,13 +134,13 @@ export function OrderSummary({
       {/* Discounts */}
       <div className="mt-4 space-y-2 border-t border-gray-100 pt-4">
         <div className="flex items-center justify-between text-sm">
-          <span className="text-gray-500">ส่วนลด</span>
+          <span className="text-gray-500">{t.orderSummary.discount}</span>
           <span className="font-semibold text-gray-800">
             ฿{discount.toLocaleString()}
           </span>
         </div>
         <div className="flex items-center justify-between text-sm">
-          <span className="text-gray-500">ส่วนลดจากคะแนน</span>
+          <span className="text-gray-500">{t.orderSummary.pointDiscount}</span>
           <span className="font-semibold text-gray-800">
             ฿{pointDiscount.toLocaleString()}
           </span>
@@ -147,7 +149,7 @@ export function OrderSummary({
 
       {/* Total */}
       <div className="mt-4 flex items-center justify-between border-t border-gray-200 pt-4">
-        <span className="font-bold text-gray-900">ราคารวม</span>
+        <span className="font-bold text-gray-900">{t.orderSummary.total}</span>
         <span className="text-lg font-bold text-gray-900">
           ฿{total.toLocaleString()}
         </span>
@@ -164,7 +166,7 @@ export function OrderSummary({
             : 'cursor-not-allowed bg-gray-200 text-gray-400'
         }`}
       >
-        ยืนยันการสั่งซื้อ →
+        {t.orderSummary.confirmBtn}
       </button>
 
       {/* Payment icons */}

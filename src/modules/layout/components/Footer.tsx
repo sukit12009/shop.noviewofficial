@@ -1,3 +1,7 @@
+'use client';
+
+import { useT } from '../../../shared/hooks/use-t';
+
 function TwitterIcon() {
   return (
     <svg
@@ -49,23 +53,23 @@ const SOCIAL_LINKS = [
   { label: 'Instagram', href: 'https://instagram.com', Icon: InstagramIcon },
 ] as const;
 
-const FOOTER_LINKS = [
-  { label: 'Terms of service', href: '/terms' },
-  { label: 'Contact Us', href: '/contact' },
-] as const;
-
 export function Footer() {
+  const t = useT();
+
+  const FOOTER_LINKS = [
+    { label: t.footer.termsOfService, href: '/terms' },
+    { label: t.footer.contactUs, href: '/contact' },
+  ];
+
   return (
     <footer className="w-full border-t border-gray-200 bg-gray-50">
       <div className="mx-auto max-w-7xl px-4 py-12">
-        {/* Main row */}
         <div className="flex flex-col gap-8 sm:flex-row sm:items-start sm:justify-between">
           {/* Left — logo + links */}
           <div className="space-y-4">
             <span className="text-2xl font-black tracking-tight text-gray-900">
               ketchup
             </span>
-
             <div className="flex items-center gap-1 text-sm text-gray-500">
               {FOOTER_LINKS.map((link, index) => (
                 <span key={link.href} className="flex items-center gap-1">
@@ -75,7 +79,6 @@ export function Footer() {
                   <a
                     href={link.href}
                     className="transition-colors hover:text-gray-900"
-                    suppressHydrationWarning
                   >
                     {link.label}
                   </a>
@@ -87,7 +90,7 @@ export function Footer() {
           {/* Right — follow us + social icons */}
           <div className="space-y-3">
             <p className="text-xs font-semibold uppercase tracking-widest text-gray-400">
-              Follow us
+              {t.footer.followUs}
             </p>
             <div className="flex items-center gap-4">
               {SOCIAL_LINKS.map(({ label, href, Icon }) => (
@@ -98,7 +101,6 @@ export function Footer() {
                   rel="noopener noreferrer"
                   aria-label={label}
                   className="text-gray-400 transition-colors hover:text-gray-900"
-                  suppressHydrationWarning
                 >
                   <Icon />
                 </a>

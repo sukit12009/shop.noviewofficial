@@ -1,3 +1,6 @@
+'use client';
+
+import { useT } from '../../../shared/hooks/use-t';
 import { HomeProductCard } from './HomeProductCard';
 import type { ProductViewModel } from '../../product/presenters/product-presenter';
 
@@ -18,6 +21,7 @@ function ProductSkeleton() {
 }
 
 export function ProductSection({ title, products, isLoading }: ProductSectionProps) {
+  const t = useT();
   return (
     <section className="bg-white py-16">
       <div className="mx-auto max-w-7xl px-4">
@@ -48,7 +52,7 @@ export function ProductSection({ title, products, isLoading }: ProductSectionPro
               className="inline-block rounded-full border-2 border-black px-12 py-3 text-sm font-bold tracking-[0.2em] text-black transition-colors hover:bg-black hover:text-white"
               suppressHydrationWarning
             >
-              VIEW ALL
+              {t.products.viewAll}
             </a>
           </div>
         )}

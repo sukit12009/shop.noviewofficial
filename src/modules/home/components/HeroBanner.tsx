@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import Image from 'next/image';
+import { useT } from '../../../shared/hooks/use-t';
 import type { BannerViewModel } from '../presenters/banner-presenter';
 
 interface HeroBannerProps {
@@ -47,6 +48,7 @@ function ChevronRight() {
 
 export function HeroBanner({ banners, isLoading = false }: HeroBannerProps) {
   const [current, setCurrent] = useState(0);
+  const t = useT();
 
   const prev = useCallback(() => {
     setCurrent((c) => (c === 0 ? banners.length - 1 : c - 1));
@@ -103,7 +105,7 @@ export function HeroBanner({ banners, isLoading = false }: HeroBannerProps) {
                 className="mt-8 inline-block rounded-full bg-white px-8 py-3 text-sm font-bold tracking-[0.2em] text-black transition-colors hover:bg-gray-100"
                 suppressHydrationWarning
               >
-                SHOP NOW
+                {t.hero.shopNow}
               </a>
             </div>
           </div>
@@ -116,7 +118,7 @@ export function HeroBanner({ banners, isLoading = false }: HeroBannerProps) {
           <button
             type="button"
             onClick={prev}
-            aria-label="Previous slide"
+            aria-label={t.hero.prevSlide}
             className="absolute left-4 top-1/2 z-10 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-white/10 text-white backdrop-blur-sm transition-colors hover:bg-white/25"
           >
             <ChevronLeft />
@@ -124,7 +126,7 @@ export function HeroBanner({ banners, isLoading = false }: HeroBannerProps) {
           <button
             type="button"
             onClick={next}
-            aria-label="Next slide"
+            aria-label={t.hero.nextSlide}
             className="absolute right-4 top-1/2 z-10 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-white/10 text-white backdrop-blur-sm transition-colors hover:bg-white/25"
           >
             <ChevronRight />
@@ -140,7 +142,7 @@ export function HeroBanner({ banners, isLoading = false }: HeroBannerProps) {
               key={index}
               type="button"
               onClick={() => setCurrent(index)}
-              aria-label={`Go to slide ${index + 1}`}
+              aria-label={t.hero.goToSlide(index + 1)}
               className={`h-1.5 rounded-full transition-all duration-300 ${
                 index === current ? 'w-7 bg-white' : 'w-1.5 bg-white/40'
               }`}

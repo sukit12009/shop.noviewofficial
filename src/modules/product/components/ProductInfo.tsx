@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useCartStore as useCart } from '../../../shared/store/cart-store';
+import { useT } from '../../../shared/hooks/use-t';
 import type { ProductDetailViewModel } from '../presenters/product-presenter';
 
 interface ProductInfoProps {
@@ -47,14 +48,15 @@ export function ProductInfo({ product }: ProductInfoProps) {
   const [error, setError] = useState<string | null>(null);
 
   const addItem = useCart((s) => s.addItem);
+  const t = useT();
 
   function handleAddToCart() {
     if (product.colors.length > 0 && !selectedColor) {
-      setError('กรุณาเลือกสี');
+      setError(t.productDetail.pleaseSelectColor);
       return;
     }
     if (product.sizes.length > 0 && !selectedSize) {
-      setError('กรุณาเลือกไซซ์');
+      setError(t.productDetail.pleaseSelectSize);
       return;
     }
     setError(null);
@@ -80,7 +82,7 @@ export function ProductInfo({ product }: ProductInfoProps) {
         }`}
       >
         <HeartIcon filled={wishlist} />
-        <span>เพิ่มในรายการโปรด</span>
+        <span>{t.productDetail.addToWishlist}</span>
       </button>
 
       {/* Name */}
@@ -96,7 +98,7 @@ export function ProductInfo({ product }: ProductInfoProps) {
       {/* Color selector */}
       {product.colors.length > 0 && (
         <div className="flex items-center gap-4">
-          <span className="w-14 flex-shrink-0 text-sm font-medium text-gray-600">สี</span>
+          <span className="w-14 flex-shrink-0 text-sm font-medium text-gray-600">{t.productDetail.color}</span>
           <div className="flex flex-wrap gap-2">
             {product.colors.map((color) => (
               <button
@@ -119,7 +121,7 @@ export function ProductInfo({ product }: ProductInfoProps) {
       {/* Size selector */}
       {product.sizes.length > 0 && (
         <div className="flex items-center gap-4">
-          <span className="w-14 flex-shrink-0 text-sm font-medium text-gray-600">ไซซ์</span>
+          <span className="w-14 flex-shrink-0 text-sm font-medium text-gray-600">{t.productDetail.size}</span>
           <div className="flex flex-wrap gap-2">
             {product.sizes.map((size) => (
               <button
@@ -141,7 +143,7 @@ export function ProductInfo({ product }: ProductInfoProps) {
 
       {/* Quantity */}
       <div className="flex items-center gap-4">
-        <span className="w-14 flex-shrink-0 text-sm font-medium text-gray-600">จำนวน</span>
+          <span className="w-14 flex-shrink-0 text-sm font-medium text-gray-600">{t.productDetail.quantity}</span>
         <div className="flex items-center gap-0 rounded-md border border-gray-300">
           <button
             type="button"
@@ -184,27 +186,24 @@ export function ProductInfo({ product }: ProductInfoProps) {
         }`}
       >
         {product.isSoldOut ? (
-          'สินค้าหมด'
+          t.productDetail.soldOut
         ) : addedToCart ? (
           <>
             <CheckIcon />
-            เพิ่มในตะกร้าแล้ว!
+            {t.productDetail.addedToCartSuccess}
           </>
         ) : (
           <>
             <CartIcon />
-            เพิ่มในตะกร้า
+            {t.productDetail.addToCartBtn}
           </>
         )}
       </button>
 
       {/* Notes */}
       <div className="space-y-1 text-xs text-gray-500">
-        <p>- ราคาสินค้าไม่รวมค่าจัดส่ง และค่าธรรมเนียมชำระสินค้า</p>
-        <p>
-          - สำหรับการจัดส่งสินค้าไปยังต่างประเทศ
-          ราคาค่าจัดส่งอาจมีการเปลี่ยนแปลงขึ้นอยู่กับพื้นที่แต่ละประเทศ
-        </p>
+        <p>{t.productDetail.noteNoShipping}</p>
+        <p>{t.productDetail.noteInternational}</p>
       </div>
     </div>
   );

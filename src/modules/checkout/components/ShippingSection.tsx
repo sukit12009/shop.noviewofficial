@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useT } from '@/shared/hooks/use-t';
 import type { ShippingAddress } from '@/shared/store/shipping-store';
 
 interface ShippingSectionProps {
@@ -34,6 +35,7 @@ const EMPTY: ShippingAddress = {
 export function ShippingSection({ address, onSave }: ShippingSectionProps) {
   const [showForm, setShowForm] = useState(false);
   const [form, setForm] = useState<ShippingAddress>(address ?? EMPTY);
+  const t = useT();
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -50,7 +52,7 @@ export function ShippingSection({ address, onSave }: ShippingSectionProps) {
       {/* Section header */}
       <div className="mb-3 flex items-center gap-2 text-orange-500">
         <PinIcon />
-        <span className="text-sm font-semibold">ตัวเลือกการจัดส่ง</span>
+        <span className="text-sm font-semibold">{t.shipping.sectionTitle}</span>
       </div>
 
       {/* Address state */}
@@ -62,9 +64,9 @@ export function ShippingSection({ address, onSave }: ShippingSectionProps) {
             </span>
             <span className="text-sm text-gray-600">
               <span className="font-semibold text-orange-500">
-                ที่อยู่สำหรับการจัดส่ง
+                {t.shipping.addressLabel}
               </span>{' '}
-              กรุณาใส่ที่อยู่เพื่อจัดส่ง
+              {t.shipping.noAddressMessage}
             </span>
           </div>
           <button
@@ -75,7 +77,7 @@ export function ShippingSection({ address, onSave }: ShippingSectionProps) {
             }}
             className="rounded-full border border-orange-400 px-4 py-1.5 text-sm font-semibold text-orange-500 transition hover:bg-orange-100"
           >
-            แก้ไข
+            {t.shipping.editBtn}
           </button>
         </div>
       ) : (
@@ -98,7 +100,7 @@ export function ShippingSection({ address, onSave }: ShippingSectionProps) {
             }}
             className="ml-4 flex-shrink-0 rounded-full border border-gray-300 px-4 py-1.5 text-sm font-semibold text-gray-600 transition hover:border-gray-500 hover:text-gray-800"
           >
-            แก้ไข
+            {t.shipping.editBtn}
           </button>
         </div>
       )}
@@ -108,66 +110,30 @@ export function ShippingSection({ address, onSave }: ShippingSectionProps) {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
           <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl">
             <h2 className="mb-5 text-lg font-bold text-gray-900">
-              ที่อยู่สำหรับการจัดส่ง
+              {t.shipping.modalTitle}
             </h2>
             <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-              <Input
-                label="ชื่อ-นามสกุล"
-                name="name"
-                value={form.name}
-                onChange={handleChange}
-                required
-              />
-              <Input
-                label="เบอร์โทรศัพท์"
-                name="phone"
-                value={form.phone}
-                onChange={handleChange}
-                required
-              />
-              <Input
-                label="ที่อยู่ (บ้านเลขที่ / ถนน / ซอย)"
-                name="address"
-                value={form.address}
-                onChange={handleChange}
-                required
-              />
+              <Input label={t.shipping.fullName} name="name" value={form.name} onChange={handleChange} required />
+              <Input label={t.shipping.phone} name="phone" value={form.phone} onChange={handleChange} required />
+              <Input label={t.shipping.address} name="address" value={form.address} onChange={handleChange} required />
               <div className="grid grid-cols-2 gap-3">
-                <Input
-                  label="แขวง/ตำบล"
-                  name="district"
-                  value={form.district}
-                  onChange={handleChange}
-                  required
-                />
-                <Input
-                  label="จังหวัด"
-                  name="province"
-                  value={form.province}
-                  onChange={handleChange}
-                  required
-                />
+                <Input label={t.shipping.district} name="district" value={form.district} onChange={handleChange} required />
+                <Input label={t.shipping.province} name="province" value={form.province} onChange={handleChange} required />
               </div>
-              <Input
-                label="รหัสไปรษณีย์"
-                name="postalCode"
-                value={form.postalCode}
-                onChange={handleChange}
-                required
-              />
+              <Input label={t.shipping.postalCode} name="postalCode" value={form.postalCode} onChange={handleChange} required />
               <div className="mt-2 flex gap-3">
                 <button
                   type="button"
                   onClick={() => setShowForm(false)}
                   className="flex-1 rounded-xl border border-gray-300 py-3 text-sm font-semibold text-gray-600 transition hover:bg-gray-50"
                 >
-                  ยกเลิก
+                  {t.shipping.cancel}
                 </button>
                 <button
                   type="submit"
                   className="flex-1 rounded-xl bg-orange-500 py-3 text-sm font-semibold text-white transition hover:bg-orange-600"
                 >
-                  บันทึก
+                  {t.shipping.save}
                 </button>
               </div>
             </form>

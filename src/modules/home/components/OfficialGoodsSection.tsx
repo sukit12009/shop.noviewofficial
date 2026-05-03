@@ -1,3 +1,6 @@
+'use client';
+
+import { useT } from '../../../shared/hooks/use-t';
 import { ProductCardV2 } from './ProductCardV2';
 import type { OfficialGoodViewModel } from '../presenters/official-good-presenter';
 
@@ -27,13 +30,14 @@ export function OfficialGoodsSection({
   onToggleFavorite,
   isLoading,
 }: OfficialGoodsSectionProps) {
+  const t = useT();
   return (
     <section className="bg-gray-50 py-16">
       <div className="mx-auto max-w-7xl px-4">
         {/* Heading */}
         <div className="mb-12 text-center">
           <p className="mb-2 text-xs font-semibold tracking-[0.4em] text-gray-400 uppercase">
-            Official Store
+            {t.products.officialStoreLabel}
           </p>
           <h2 className="text-3xl font-black tracking-[0.2em] text-gray-900 uppercase md:text-4xl">
             NADAO OFFICIAL GOODS
@@ -63,7 +67,7 @@ export function OfficialGoodsSection({
               className="inline-block rounded-full border-2 border-black px-12 py-3 text-sm font-bold tracking-[0.2em] text-black transition-colors hover:bg-black hover:text-white"
               suppressHydrationWarning
             >
-              VIEW ALL
+              {t.products.viewAll}
             </a>
           </div>
         )}

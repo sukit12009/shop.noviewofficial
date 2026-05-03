@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useCart } from '@/shared/hooks/use-cart';
 import { useShippingStore } from '@/shared/store/shipping-store';
+import { useT } from '@/shared/hooks/use-t';
 import { CartItemRow } from './CartItemRow';
 import { ShippingSection } from './ShippingSection';
 import { OrderSummary } from './OrderSummary';
@@ -24,6 +25,7 @@ export function CheckoutPage() {
   const [discount, setDiscount] = useState(0);
   const [pointDiscount] = useState(0);
   const shippingFee = 0;
+  const t = useT();
 
   function handleSaveAddress(addr: NonNullable<typeof shippingAddress>) {
     setStoreAddress(addr);
@@ -35,12 +37,12 @@ export function CheckoutPage() {
       setDiscount(Math.floor(subtotal * 0.1));
     } else {
       setDiscount(0);
-      alert(`รหัส "${code}" ไม่ถูกต้องหรือหมดอายุแล้ว`);
+      alert(t.checkout.couponInvalid(code));
     }
   }
 
   function handleConfirm() {
-    alert('ขอบคุณสำหรับการสั่งซื้อ! ระบบชำระเงินจะเปิดในขั้นตอนถัดไป');
+    alert(t.checkout.confirmAlert);
   }
 
   return (
@@ -49,15 +51,15 @@ export function CheckoutPage() {
         {/* Breadcrumb */}
         <nav className="mb-8 flex items-center gap-2 text-sm text-gray-500">
           <Link href="/" className="transition hover:text-gray-800">
-            หน้าแรก
+            {t.checkout.breadcrumbHome}
           </Link>
           <span className="text-gray-300">›</span>
-          <span className="font-semibold text-gray-800">จ่ายเลย</span>
+          <span className="font-semibold text-gray-800">{t.checkout.title}</span>
         </nav>
 
         {/* Page title */}
         <h1 className="mb-8 text-center text-3xl font-bold text-gray-900">
-          จ่ายเลย
+          {t.checkout.title}
         </h1>
 
         <div className="flex flex-col gap-8 lg:flex-row lg:items-start">
@@ -72,12 +74,12 @@ export function CheckoutPage() {
             {/* Cart items */}
             {items.length === 0 ? (
               <div className="rounded-2xl border border-gray-200 bg-white p-12 text-center">
-                <p className="text-gray-500">ตะกร้าของคุณว่างเปล่า</p>
+                <p className="text-gray-500">{t.checkout.emptyCart}</p>
                 <Link
                   href="/"
                   className="mt-4 inline-block rounded-xl bg-orange-500 px-6 py-3 text-sm font-semibold text-white transition hover:bg-orange-600"
                 >
-                  กลับไปเลือกสินค้า
+                  {t.checkout.backToShop}
                 </Link>
               </div>
             ) : (
@@ -85,10 +87,10 @@ export function CheckoutPage() {
                 {/* Header row */}
                 <div className="flex items-center justify-between border-b border-gray-100 py-4">
                   <span className="text-sm font-semibold text-gray-800">
-                    ตะกร้าของฉัน
+                    {t.checkout.myCart}
                   </span>
                   <span className="text-sm text-gray-500">
-                    {items.reduce((sum, i) => sum + i.quantity, 0)} รายการ
+                    {t.checkout.itemCount(items.reduce((sum, i) => sum + i.quantity, 0))}
                   </span>
                 </div>
 

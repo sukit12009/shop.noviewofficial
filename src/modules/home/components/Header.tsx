@@ -4,6 +4,8 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { useAuthStore } from '../../../shared/store/auth-store';
 import { useCart } from '../../../shared/hooks/use-cart';
+import { useLangStore } from '../../../shared/store/lang-store';
+import { useT } from '../../../shared/hooks/use-t';
 
 function SearchIcon() {
   return (
@@ -82,34 +84,40 @@ function MenuIcon() {
   );
 }
 
-const NAV_LINKS = ['SHOP', 'ARTIST', 'NEWS'] as const;
-
 export function Header() {
-  const [lang, setLang] = useState<'TH' | 'EN'>('TH');
   const [langOpen, setLangOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+
   const logout = useAuthStore((s) => s.logout);
   const user = useAuthStore((s) => s.user);
   const { itemCount: cartCount } = useCart();
+  const lang = useLangStore((s) => s.lang);
+  const setLang = useLangStore((s) => s.setLang);
+  const t = useT();
+
+  const NAV_LINKS = [
+    { key: 'shop', label: t.nav.shop },
+    { key: 'artist', label: t.nav.artist },
+    { key: 'news', label: t.nav.news },
+  ];
 
   return (
     <header className="sticky top-0 z-50 border-b border-gray-100 bg-white shadow-sm">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-6 px-4">
         {/* Logo */}
-        <a href="/" className="flex-shrink-0" suppressHydrationWarning>
+        <Link href="/" className="flex-shrink-0">
           <span className="text-xl font-black tracking-[0.25em] text-gray-900">
             NOVIEW
           </span>
-        </a>
+        </Link>
 
         {/* Center Nav */}
         <nav className="hidden items-center gap-8 md:flex">
-          {NAV_LINKS.map((label) => (
+          {NAV_LINKS.map(({ key, label }) => (
             <a
-              key={label}
+              key={key}
               href="#"
               className="text-sm font-semibold tracking-widest text-gray-600 transition-colors hover:text-black"
-              suppressHydrationWarning
             >
               {label}
             </a>
@@ -121,7 +129,7 @@ export function Header() {
           {/* Search */}
           <button
             type="button"
-            aria-label="Search"
+            aria-label={t.nav.searchAriaLabel}
             className="p-1.5 text-gray-600 transition-colors hover:text-black"
           >
             <SearchIcon />
@@ -152,23 +160,22 @@ export function Header() {
                 onClick={logout}
                 className="text-xs font-semibold tracking-widest text-gray-400 transition-colors hover:text-black"
               >
-                LOGOUT
+                {t.nav.logout}
               </button>
             </div>
           ) : (
-            <a
+            <Link
               href="/login"
               className="hidden text-sm font-semibold tracking-widest text-gray-600 transition-colors hover:text-black md:block"
-              suppressHydrationWarning
             >
-              LOGIN
-            </a>
+              {t.nav.login}
+            </Link>
           )}
 
           {/* Cart */}
           <Link
             href="/checkout"
-            aria-label={`Cart (${cartCount} items)`}
+            aria-label={t.nav.cartAriaLabel}
             className="relative p-1.5 text-gray-600 transition-colors hover:text-black"
           >
             <CartIcon />
@@ -227,12 +234,11 @@ export function Header() {
       {/* Mobile Nav Drawer */}
       {mobileOpen && (
         <div className="border-t border-gray-100 bg-white md:hidden">
-          {NAV_LINKS.map((label) => (
+          {NAV_LINKS.map(({ key, label }) => (
             <a
-              key={label}
+              key={key}
               href="#"
               className="block px-6 py-4 text-sm font-semibold tracking-widest text-gray-700 transition-colors hover:bg-gray-50"
-              suppressHydrationWarning
             >
               {label}
             </a>
