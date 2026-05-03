@@ -4,6 +4,7 @@ export interface ProductViewModel {
   id: string;
   name: string;
   description: string;
+  price: number;
   formattedPrice: string;
   imageUrl: string;
   category: string;
@@ -48,6 +49,7 @@ export function presentProduct(product: Product): ProductViewModel {
     id: product.id,
     name: product.name,
     description: product.description,
+    price: product.price,
     formattedPrice: formatPrice(product.price),
     imageUrl: product.imageUrl,
     category: product.category,

@@ -1,4 +1,8 @@
+'use client';
+
+import { useState } from 'react';
 import Image from 'next/image';
+import { useCartStore } from '@/shared/store/cart-store';
 import type { ProductViewModel } from '../presenters/product-presenter';
 
 interface ProductCardProps {
@@ -6,6 +10,20 @@ interface ProductCardProps {
 }
 
 export function ProductCard({ product }: ProductCardProps) {
+  const [added, setAdded] = useState(false);
+  const addItem = useCartStore((s) => s.addItem);
+
+  function handleAddToCart() {
+    addItem({
+      productId: product.id,
+      name: product.name,
+      price: product.price,
+      imageUrl: product.imageUrl,
+    });
+    setAdded(true);
+    setTimeout(() => setAdded(false), 1800);
+  }
+
   return (
     <div className="group flex flex-col overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition-shadow hover:shadow-md">
       <div className="relative h-52 bg-gray-50">
@@ -36,9 +54,14 @@ export function ProductCard({ product }: ProductCardProps) {
         </p>
         <button
           type="button"
-          className="mt-3 w-full rounded-lg bg-indigo-600 py-2 text-sm font-medium text-white transition-colors hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+          onClick={handleAddToCart}
+          className={`mt-3 w-full rounded-lg py-2 text-sm font-medium text-white transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 ${
+            added
+              ? 'bg-green-500 focus:ring-green-500'
+              : 'bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-500'
+          }`}
         >
-          Add to Cart
+          {added ? '✓ เพิ่มในตะกร้าแล้ว' : 'Add to Cart'}
         </button>
       </div>
     </div>

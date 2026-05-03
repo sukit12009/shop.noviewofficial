@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import { useAuthStore } from '../../../shared/store/auth-store';
 
 interface User {
@@ -172,8 +173,8 @@ export function Header({ cartCount, user }: HeaderProps) {
           )}
 
           {/* Cart */}
-          <button
-            type="button"
+          <Link
+            href="/checkout"
             aria-label={`Cart (${cartCount} items)`}
             className="relative p-1.5 text-gray-600 transition-colors hover:text-black"
           >
@@ -183,7 +184,7 @@ export function Header({ cartCount, user }: HeaderProps) {
                 {cartCount > 99 ? '99+' : cartCount}
               </span>
             )}
-          </button>
+          </Link>
 
           {/* Language Dropdown */}
           <div className="relative">

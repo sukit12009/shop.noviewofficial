@@ -2,9 +2,15 @@
 
 import { useEffect, useState } from 'react';
 import { useCartStore } from '../store/cart-store';
+import type { CartItem } from '../store/cart-store';
 
 interface UseCartResult {
   itemCount: number;
+  items: CartItem[];
+  subtotal: number;
+  updateQuantity: (productId: string, quantity: number) => void;
+  removeItem: (productId: string) => void;
+  clearCart: () => void;
 }
 
 /**
@@ -14,14 +20,20 @@ interface UseCartResult {
 export function useCart(): UseCartResult {
   const [mounted, setMounted] = useState(false);
   const items = useCartStore((s) => s.items);
+  const updateQuantity = useCartStore((s) => s.updateQuantity);
+  const removeItem = useCartStore((s) => s.removeItem);
+  const clearCart = useCartStore((s) => s.clearCart);
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  const itemCount = mounted
-    ? items.reduce((sum, item) => sum + item.quantity, 0)
-    : 0;
+  const hydratedItems = mounted ? items : [];
+  const itemCount = hydratedItems.reduce((sum, item) => sum + item.quantity, 0);
+  const subtotal = hydratedItems.reduce(
+    (sum, item) => sum + item.price * item.quantity,
+    0,
+  );
 
-  return { itemCount };
+  return { itemCount, items: hydratedItems, subtotal, updateQuantity, removeItem, clearCart };
 }
