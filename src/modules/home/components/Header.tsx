@@ -8,6 +8,7 @@ import { useCart } from '../../../shared/hooks/use-cart';
 import { useLangStore } from '../../../shared/store/lang-store';
 import { useT } from '../../../shared/hooks/use-t';
 import { MOCK_CATEGORIES } from '../../../shared/config/categories';
+import { MOCK_ARTISTS } from '../../../shared/config/artists';
 import type { Lang } from '../../../shared/store/lang-store';
 
 function SearchIcon() {
@@ -95,6 +96,7 @@ export function Header() {
   const [langOpen, setLangOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [mobileShopOpen, setMobileShopOpen] = useState(false);
+  const [mobileArtistOpen, setMobileArtistOpen] = useState(false);
 
   const router = useRouter();
   const logout = useAuthStore((s) => s.logout);
@@ -104,10 +106,7 @@ export function Header() {
   const setLang = useLangStore((s) => s.setLang);
   const t = useT();
 
-  const OTHER_NAV = [
-    { key: 'artist', label: t.nav.artist, href: '#' },
-    { key: 'news', label: t.nav.news, href: '#' },
-  ];
+  const NEWS_NAV = { key: 'news', label: t.nav.news, href: '#' };
 
   return (
     <header className="sticky top-0 z-50 border-b border-gray-100 bg-white shadow-sm">
@@ -148,16 +147,39 @@ export function Header() {
             </div>
           </div>
 
-          {/* Other nav links */}
-          {OTHER_NAV.map(({ key, label, href }) => (
-            <Link
-              key={key}
-              href={href}
-              className="text-sm font-semibold tracking-widest text-gray-600 transition-colors hover:text-black"
+          {/* ARTIST with hover dropdown */}
+          <div className="group relative">
+            <button
+              type="button"
+              className="flex items-center gap-1 text-sm font-semibold tracking-widest text-gray-600 transition-colors group-hover:text-black"
             >
-              {label}
-            </Link>
-          ))}
+              {t.nav.artist}
+              <ChevronDownIcon />
+            </button>
+
+            <div className="invisible absolute left-0 top-full pt-2 opacity-0 transition-all duration-150 group-hover:visible group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto">
+              <div className="min-w-[180px] overflow-hidden rounded-xl border border-gray-100 bg-white shadow-xl">
+                {MOCK_ARTISTS.map((artist) => (
+                  <Link
+                    key={artist.id}
+                    href={`/artist/${artist.id.replace('artist-', '')}?page=1`}
+                    className="flex items-center gap-3 px-5 py-3.5 text-sm font-semibold tracking-wide text-gray-600 transition-colors hover:bg-orange-50 hover:text-orange-500"
+                  >
+                    <span className="h-1.5 w-1.5 flex-shrink-0 rounded-full bg-orange-400" />
+                    {getCategoryTitle(artist.title as Record<string, string>, lang)}
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* NEWS */}
+          <Link
+            href={NEWS_NAV.href}
+            className="text-sm font-semibold tracking-widest text-gray-600 transition-colors hover:text-black"
+          >
+            {NEWS_NAV.label}
+          </Link>
         </nav>
 
         {/* Right Actions */}
@@ -303,17 +325,41 @@ export function Header() {
             </div>
           )}
 
-          {/* Other nav links */}
-          {OTHER_NAV.map(({ key, label, href }) => (
-            <Link
-              key={key}
-              href={href}
-              onClick={() => setMobileOpen(false)}
-              className="block px-6 py-4 text-sm font-semibold tracking-widest text-gray-700 transition-colors hover:bg-gray-50"
-            >
-              {label}
-            </Link>
-          ))}
+          {/* ARTIST — expandable */}
+          <button
+            type="button"
+            onClick={() => setMobileArtistOpen((o) => !o)}
+            className="flex w-full items-center justify-between px-6 py-4 text-sm font-semibold tracking-widest text-gray-700 transition-colors hover:bg-gray-50"
+          >
+            {t.nav.artist}
+            <span className={`transition-transform duration-200 ${mobileArtistOpen ? 'rotate-180' : ''}`}>
+              <ChevronDownIcon />
+            </span>
+          </button>
+          {mobileArtistOpen && (
+            <div className="border-t border-gray-50 bg-orange-50/50">
+              {MOCK_ARTISTS.map((artist) => (
+                <Link
+                  key={artist.id}
+                  href={`/artist/${artist.id.replace('artist-', '')}?page=1`}
+                  onClick={() => setMobileOpen(false)}
+                  className="flex items-center gap-3 px-8 py-3.5 text-sm font-medium text-gray-600 transition-colors hover:text-orange-500"
+                >
+                  <span className="h-1.5 w-1.5 flex-shrink-0 rounded-full bg-orange-400" />
+                  {getCategoryTitle(artist.title as Record<string, string>, lang)}
+                </Link>
+              ))}
+            </div>
+          )}
+
+          {/* NEWS */}
+          <Link
+            href={NEWS_NAV.href}
+            onClick={() => setMobileOpen(false)}
+            className="block px-6 py-4 text-sm font-semibold tracking-widest text-gray-700 transition-colors hover:bg-gray-50"
+          >
+            {NEWS_NAV.label}
+          </Link>
         </div>
       )}
     </header>

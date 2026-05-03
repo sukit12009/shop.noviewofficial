@@ -11,6 +11,8 @@
  * it in useCategoryItems.ts.
  */
 
+import { MOCK_ARTISTS } from './artists';
+
 export type DataSource = 'products' | 'official-goods';
 
 export interface CategoryConfig {
@@ -41,7 +43,7 @@ export const MOCK_CATEGORIES: CategoryConfig[] = [
   // },
 ];
 
-/** Quick lookup by id — returns undefined if category not found */
+/** Unified lookup — searches MOCK_CATEGORIES then MOCK_ARTISTS */
 export function getCategoryById(id: string): CategoryConfig | undefined {
-  return MOCK_CATEGORIES.find((c) => c.id === id);
+  return MOCK_CATEGORIES.find((c) => c.id === id) ?? MOCK_ARTISTS.find((a) => a.id === id);
 }
