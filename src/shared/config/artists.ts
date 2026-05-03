@@ -10,12 +10,12 @@ export const MOCK_ARTISTS: CategoryConfig[] = [
   {
     id: 'artist-1',
     title: { TH: 'TADA', EN: 'TADA' },
-    dataSource: 'products',
+    dataSource: 'tada-artist',
   },
   {
     id: 'artist-2',
     title: { TH: 'BUS', EN: 'BUS' },
-    dataSource: 'official-goods',
+    dataSource: 'bus-artist',
   },
 ];
 

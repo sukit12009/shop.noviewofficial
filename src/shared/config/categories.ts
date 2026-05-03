@@ -13,7 +13,7 @@
 
 import { MOCK_ARTISTS } from './artists';
 
-export type DataSource = 'products' | 'official-goods';
+export type DataSource = 'products' | 'official-goods' | 'tada-artist' | 'bus-artist';
 
 export interface CategoryConfig {
   id: string;
