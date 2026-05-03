@@ -1,14 +1,17 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useAuthStore } from '@/shared/store/auth-store';
 import { useShippingStore } from '@/shared/store/shipping-store';
+import { useOrderStore } from '@/shared/store/order-store';
 import { useT } from '@/shared/hooks/use-t';
 import { useWishlistItems } from '@/shared/hooks/use-wishlist-items';
 import { CategoryProductCard } from '@/modules/category/components/CategoryProductCard';
 import type { ShippingAddress } from '@/shared/store/shipping-store';
+import type { Order } from '@/core/entities/order';
 
 type Tab = 'information' | 'wishlist' | 'history';
 
@@ -127,14 +130,41 @@ function Field({
   );
 }
 
+const STATUS_COLOR: Record<Order['status'], string> = {
+  pending: 'bg-yellow-100 text-yellow-700',
+  confirmed: 'bg-blue-100 text-blue-700',
+  shipped: 'bg-purple-100 text-purple-700',
+  delivered: 'bg-green-100 text-green-700',
+};
+
+function formatPrice(n: number) {
+  return n.toLocaleString('th-TH', { style: 'currency', currency: 'THB', maximumFractionDigits: 0 });
+}
+
+function formatDate(iso: string) {
+  return new Date(iso).toLocaleDateString('th-TH', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  });
+}
+
 export function ProfilePage() {
-  const [activeTab, setActiveTab] = useState<Tab>('information');
+  const searchParams = useSearchParams();
+  const initialTab = (searchParams.get('tab') as Tab | null) ?? 'information';
+  const [activeTab, setActiveTab] = useState<Tab>(initialTab);
   const [showAddressModal, setShowAddressModal] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => { setMounted(true); }, []);
 
   const user = useAuthStore((s) => s.user);
   const logout = useAuthStore((s) => s.logout);
   const shippingAddress = useShippingStore((s) => s.address);
   const setShippingAddress = useShippingStore((s) => s.setAddress);
+  const orders = useOrderStore((s) => s.orders);
   const { items: wishlistItems, isLoading: wishlistLoading } = useWishlistItems();
   const t = useT();
 
@@ -297,8 +327,74 @@ export function ProfilePage() {
             )}
 
             {activeTab === 'history' && (
-              <div className="flex min-h-[200px] items-center justify-center">
-                <p className="text-sm text-gray-400">{t.profile.emptyHistory}</p>
+              <div className="py-6">
+                {!mounted || orders.length === 0 ? (
+                  <div className="flex min-h-[200px] items-center justify-center">
+                    <p className="text-sm text-gray-400">{t.profile.emptyHistory}</p>
+                  </div>
+                ) : (
+                  <div className="flex flex-col gap-4">
+                    {orders.map((order) => (
+                      <div
+                        key={order.id}
+                        className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm"
+                      >
+                        {/* Order header */}
+                        <div className="flex flex-wrap items-center justify-between gap-2 border-b border-gray-100 px-5 py-3">
+                          <div className="flex items-center gap-3">
+                            <span className="text-sm font-bold text-gray-800">
+                              {t.orderHistory.orderId(order.id)}
+                            </span>
+                            <span
+                              className={`rounded-full px-2.5 py-0.5 text-xs font-semibold ${STATUS_COLOR[order.status]}`}
+                            >
+                              {t.orderHistory.status[order.status]}
+                            </span>
+                          </div>
+                          <div className="flex items-center gap-4 text-xs text-gray-400">
+                            <span>{t.orderHistory.date}: {formatDate(order.createdAt)}</span>
+                            <span>{t.orderHistory.itemCount(order.items.reduce((s, i) => s + i.quantity, 0))}</span>
+                          </div>
+                        </div>
+
+                        {/* Items */}
+                        <div className="divide-y divide-gray-50 px-5">
+                          {order.items.map((item) => (
+                            <div key={item.variantKey} className="flex items-center gap-4 py-3">
+                              <div className="relative h-14 w-14 flex-shrink-0 overflow-hidden rounded-lg bg-gray-100">
+                                <Image
+                                  src={item.imageUrl}
+                                  alt={item.name}
+                                  fill
+                                  className="object-cover"
+                                  sizes="56px"
+                                />
+                              </div>
+                              <div className="min-w-0 flex-1">
+                                <p className="truncate text-sm font-semibold text-gray-800">{item.name}</p>
+                                <p className="text-xs text-gray-400">
+                                  {[item.color, item.size].filter(Boolean).join(' / ')}
+                                  {' '}× {item.quantity}
+                                </p>
+                              </div>
+                              <p className="flex-shrink-0 text-sm font-bold text-gray-800">
+                                {formatPrice(item.price * item.quantity)}
+                              </p>
+                            </div>
+                          ))}
+                        </div>
+
+                        {/* Footer */}
+                        <div className="flex items-center justify-end gap-2 border-t border-gray-100 px-5 py-3">
+                          <span className="text-sm text-gray-500">{t.orderHistory.total}:</span>
+                          <span className="text-base font-black text-orange-500">
+                            {formatPrice(order.total)}
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
             )}
           </div>

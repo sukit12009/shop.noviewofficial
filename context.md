@@ -61,7 +61,8 @@ src/
 │   │   ├── banner.ts       # Banner { id, title, subtitle, imageUrl, linkUrl }
 │   │   ├── product.ts      # Product { id, name, description, price, imageUrl, images?, stock, category, isNew, colors?, sizes?, details?, sizeChart? }
 │   │   ├── official-good.ts # OfficialGood { id, name, price, imageUrl, isSoldOut, images?, colors?, sizes?, details?, sizeChart? }
-│   │   └── user.ts         # User { id, name, email, avatarUrl? }
+│   │   ├── user.ts         # User { id, name, email, avatarUrl? }
+│   │   └── order.ts        # Order { id, createdAt, items, subtotal, discount, shippingFee, total, shippingAddress, status }
 │   ├── repositories/
 │   │   ├── banner-repository.ts
 │   │   ├── product-repository.ts  # getProducts + getProductById
@@ -133,7 +134,8 @@ src/
 │   │   └── use-cart.ts    # SSR-safe cart item count hook (mounted guard)
 │   └── store/
 │       ├── cart-store.ts  # Zustand persist store → localStorage 'cart-storage'
-│       └── auth-store.ts  # Zustand persist store → localStorage 'auth-storage' — user: User | null, setUser, logout
+│       ├── auth-store.ts  # Zustand persist store → localStorage 'auth-storage' — user: User | null, setUser, logout
+│       └── order-store.ts # Zustand persist store → localStorage 'order-storage' — orders: Order[], addOrder
 │
 └── lib/
     ├── providers.tsx       # QueryClientProvider + ReactQueryDevtools
@@ -198,8 +200,8 @@ Banners และ OfficialGoods ยังใช้ mock repository อยู่ 
 | Dynamic categories (`/category/[id]`) | ✅ MOCK_CATEGORIES config + useCategoryItems |
 | Real API integration (banners, goods) | ❌ ยังใช้ mock repository |
 | Cart variant tracking (color/size) | ✅ CartItem มี color/size + variantKey เป็น unique key ต่อ cart line |
-| Payment gateway | ❌ handleConfirm ยังเป็น alert() |
-| Order entity + history | ❌ ไม่มี Order entity/repository — profile history tab ว่าง |
+| Payment gateway | ✅ handleConfirm save order → localStorage แล้ว clear cart + redirect /profile?tab=history |
+| Order entity + history | ✅ Order entity + order-store (Zustand persist) — profile history tab แสดง order list |
 | Search functionality | ✅ `/search?q=` — ค้นหาชื่อสินค้าจากทั้ง products + official-goods |
 | ARTIST pages | ✅ `/artist/[id]` — reuse CategoryPage, dropdown ใน Header |
 | NEWS pages | ✅ `/news` (listing) + `/news/[id]` (detail) — 8 mock articles, 4 categories |

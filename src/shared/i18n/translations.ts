@@ -57,6 +57,11 @@ export const translations = {
         `รหัส "${code}" ไม่ถูกต้องหรือหมดอายุแล้ว`,
       confirmAlert:
         'ขอบคุณสำหรับการสั่งซื้อ! ระบบชำระเงินจะเปิดในขั้นตอนถัดไป',
+      successTitle: 'สั่งซื้อสำเร็จ!',
+      successMessage: 'ขอบคุณสำหรับการสั่งซื้อ เราจะดำเนินการจัดส่งให้โดยเร็วที่สุด',
+      successOrderId: (id: string) => `หมายเลขคำสั่งซื้อ: ${id}`,
+      successViewHistory: 'ดูประวัติการสั่งซื้อ',
+      successBackHome: 'กลับหน้าแรก',
     },
     // Cart item row
     cartItem: {
@@ -116,6 +121,18 @@ export const translations = {
       emptyHistory: 'ยังไม่มีประวัติการสั่งซื้อ',
       loginRequired: 'กรุณาเข้าสู่ระบบเพื่อดูโปรไฟล์',
       loginBtn: 'เข้าสู่ระบบ',
+    },
+    orderHistory: {
+      orderId: (id: string) => `คำสั่งซื้อ #${id}`,
+      date: 'วันที่สั่งซื้อ',
+      itemCount: (n: number) => `${n} รายการ`,
+      total: 'ยอดรวม',
+      status: {
+        pending: 'รอดำเนินการ',
+        confirmed: 'ยืนยันแล้ว',
+        shipped: 'กำลังจัดส่ง',
+        delivered: 'จัดส่งแล้ว',
+      },
     },
     wishlist: {
       add: 'เพิ่มในรายการโปรด',
@@ -209,6 +226,11 @@ export const translations = {
         `Code "${code}" is invalid or has expired.`,
       confirmAlert:
         'Thank you for your order! The payment page will open in the next step.',
+      successTitle: 'Order Placed!',
+      successMessage: 'Thank you for your purchase. We will process your order as soon as possible.',
+      successOrderId: (id: string) => `Order ID: ${id}`,
+      successViewHistory: 'View Order History',
+      successBackHome: 'Back to Home',
     },
     // Cart item row
     cartItem: {
@@ -268,6 +290,18 @@ export const translations = {
       emptyHistory: 'No order history yet.',
       loginRequired: 'Please log in to view your profile.',
       loginBtn: 'Log In',
+    },
+    orderHistory: {
+      orderId: (id: string) => `Order #${id}`,
+      date: 'Date',
+      itemCount: (n: number) => `${n} item${n !== 1 ? 's' : ''}`,
+      total: 'Total',
+      status: {
+        pending: 'Pending',
+        confirmed: 'Confirmed',
+        shipped: 'Shipped',
+        delivered: 'Delivered',
+      },
     },
     wishlist: {
       add: 'Add to wishlist',
