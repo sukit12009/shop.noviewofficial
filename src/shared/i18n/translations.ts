@@ -117,6 +117,10 @@ export const translations = {
       loginRequired: 'กรุณาเข้าสู่ระบบเพื่อดูโปรไฟล์',
       loginBtn: 'เข้าสู่ระบบ',
     },
+    wishlist: {
+      add: 'เพิ่มในรายการโปรด',
+      remove: 'ลบออกจากรายการโปรด',
+    },
     // Category page UI — titles come from src/shared/config/categories.ts
     category: {
       breadcrumbHome: 'หน้าแรก',
@@ -254,6 +258,10 @@ export const translations = {
       emptyHistory: 'No order history yet.',
       loginRequired: 'Please log in to view your profile.',
       loginBtn: 'Log In',
+    },
+    wishlist: {
+      add: 'Add to wishlist',
+      remove: 'Remove from wishlist',
     },
     // Category
     category: {

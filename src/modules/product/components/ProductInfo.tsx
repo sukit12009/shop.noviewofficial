@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useCartStore as useCart } from '../../../shared/store/cart-store';
+import { useWishlist } from '../../../shared/hooks/use-wishlist';
 import { useT } from '../../../shared/hooks/use-t';
 import type { ProductDetailViewModel } from '../presenters/product-presenter';
 
@@ -43,12 +44,14 @@ export function ProductInfo({ product }: ProductInfoProps) {
     product.sizes[0] ?? null,
   );
   const [quantity, setQuantity] = useState(1);
-  const [wishlist, setWishlist] = useState(false);
   const [addedToCart, setAddedToCart] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const addItem = useCart((s) => s.addItem);
+  const { has, toggle } = useWishlist();
   const t = useT();
+
+  const isFav = has(product.id);
 
   function handleAddToCart() {
     if (product.colors.length > 0 && !selectedColor) {
@@ -76,13 +79,13 @@ export function ProductInfo({ product }: ProductInfoProps) {
       {/* Wishlist */}
       <button
         type="button"
-        onClick={() => setWishlist((v) => !v)}
+        onClick={() => toggle(product.id)}
         className={`flex items-center gap-1.5 self-start text-sm transition ${
-          wishlist ? 'text-rose-500' : 'text-gray-400 hover:text-rose-400'
+          isFav ? 'text-rose-500' : 'text-gray-400 hover:text-rose-400'
         }`}
       >
-        <HeartIcon filled={wishlist} />
-        <span>{t.productDetail.addToWishlist}</span>
+        <HeartIcon filled={isFav} />
+        <span>{isFav ? t.wishlist.remove : t.productDetail.addToWishlist}</span>
       </button>
 
       {/* Name */}
