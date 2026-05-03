@@ -37,10 +37,11 @@ const safeValue = mounted ? storeValue : defaultValue;
 
 | Store | File | localStorage key |
 |-------|------|-----------------|
-| Cart | `shared/store/cart-store.ts` | `cart-storage` |
-| Auth | `shared/store/auth-store.ts` | `auth-storage` |
-| Shipping | `shared/store/shipping-store.ts` | `shipping-storage` |
-| Language | `shared/store/lang-store.ts` | `lang-storage` |
+| Cart | `shared/store/cart-store.ts` | `noview-shop-cart-storage` |
+| Auth | `shared/store/auth-store.ts` | `noview-shop-auth-storage` |
+| Shipping | `shared/store/shipping-store.ts` | `noview-shop-shipping-storage` |
+| Language | `shared/store/lang-store.ts` | `noview-shop-lang-storage` |
+| Wishlist | `shared/store/wishlist-store.ts` | `noview-shop-wishlist-storage` |
 
 ## Rules
 

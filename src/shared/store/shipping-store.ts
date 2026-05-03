@@ -24,7 +24,7 @@ export const useShippingStore = create<ShippingState>()(
         setAddress: (address) => set({ address }),
         clearAddress: () => set({ address: null }),
       }),
-      { name: 'shipping-storage' },
+      { name: 'noview-shop-shipping-storage' },
     ),
     { name: 'ShippingStore' },
   ),

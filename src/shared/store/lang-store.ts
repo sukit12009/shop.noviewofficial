@@ -15,7 +15,7 @@ export const useLangStore = create<LangState>()(
         lang: 'TH',
         setLang: (lang) => set({ lang }),
       }),
-      { name: 'lang-storage' },
+      { name: 'noview-shop-lang-storage' },
     ),
     { name: 'LangStore' },
   ),
