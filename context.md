@@ -201,7 +201,8 @@ Banners และ OfficialGoods ยังใช้ mock repository อยู่ 
 | Payment gateway | ❌ handleConfirm ยังเป็น alert() |
 | Order entity + history | ❌ ไม่มี Order entity/repository — profile history tab ว่าง |
 | Search functionality | ✅ `/search?q=` — ค้นหาชื่อสินค้าจากทั้ง products + official-goods |
-| ARTIST / NEWS pages | ❌ nav links ชี้ไป `#` |
+| ARTIST pages | ✅ `/artist/[id]` — reuse CategoryPage, dropdown ใน Header |
+| NEWS pages | ✅ `/news` (listing) + `/news/[id]` (detail) — 8 mock articles, 4 categories |
 
 ---
 

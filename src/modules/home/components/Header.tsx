@@ -106,7 +106,7 @@ export function Header() {
   const setLang = useLangStore((s) => s.setLang);
   const t = useT();
 
-  const NEWS_NAV = { key: 'news', label: t.nav.news, href: '#' };
+  const NEWS_NAV = { key: 'news', label: t.nav.news, href: '/news' };
 
   return (
     <header className="sticky top-0 z-50 border-b border-gray-100 bg-white shadow-sm">

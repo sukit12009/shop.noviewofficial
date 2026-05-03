@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>คำนวณค่าห้องแถว</title>
+
+<style>
+body {
+  font-family: sans-serif;
+  background: #f5f7fa;
+  padding: 10px;
+}
+
+h1 { text-align: center; }
+
+.summary-box {
+  background: #fff;
+  padding: 12px;
+  margin-top: 15px;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+button {
+  width: 100%;
+  padding: 12px;
+  background: green;
+  color: white;
+  border: none;
+  font-size: 16px;
+  margin-top: 10px;
+}
+
+input {
+  width: 100%;
+  padding: 6px;
+  margin: 2px 0;
+}
+
+.card {
+  background: white;
+  padding: 12px;
+  margin-bottom: 12px;
+  border-radius: 10px;
+}
+
+.result {
+  font-weight: bold;
+  color: #d9534f;
+}
+</style>
+</head>
+
+<body>
+
+<h1>คำนวณค่าห้องแถว</h1>
+
+<div id="cards"></div>
+
+<button onclick="calculate()">คำนวณ</button>
+
+<h2>รวมทั้งหมด: <span id="grandTotal">0</span> บาท</h2>
+
+<div class="summary-box" id="summaryBox" style="display:none;">
+  <h3>📋 รายละเอียดการคิดค่าใช้จ่าย</h3>
+  <p>🗑 ค่าขยะ: 20 บาท / ห้อง</p>
+  <p>⚡ ค่าไฟ: 8 บาท / หน่วย (คิดจาก มิเตอร์ปัจจุบัน - ก่อน)</p>
+  <p>💧 ค่าน้ำ:</p>
+  <ul>
+    <li>ห้อง 1–3: 18 บาท / หน่วย</li>
+    <li>ห้อง 4–8: กรอกเป็นบาท</li>
+  </ul>
+</div>
+
+<script>
+const rooms = [
+  {room:1, rent:1100, waterType:"unit"},
+  {room:2, rent:1200, waterType:"unit"},
+  {room:3, rent:1100, waterType:"unit"},
+  {room:4, rent:1200, waterType:"price"},
+  {room:5, rent:1200, waterType:"price"},
+  {room:6, rent:1100, waterType:"price"},
+  {room:7, rent:1200, waterType:"price"},
+  {room:8, rent:1200, waterType:"price"},
+];
+
+const container = document.getElementById("cards");
+
+rooms.forEach(r => {
+  let waterInput = r.waterType === "unit"
+    ? `
+      <label>น้ำ (ก่อน / ปัจจุบัน)</label>
+      <input id="wPrev${r.room}">
+      <input id="wNow${r.room}">
+    `
+    : `
+      <label>ค่าน้ำ (บาท)</label>
+      <input id="wPrice${r.room}">
+    `;
+
+  let div = document.createElement("div");
+  div.className = "card";
+  div.innerHTML = `
+    <h3>ห้อง ${r.room} (ค่าเช่า ${r.rent})</h3>
+
+    <label>ไฟ (ก่อน / ปัจจุบัน)</label>
+    <input id="ePrev${r.room}">
+    <input id="eNow${r.room}">
+
+    ${waterInput}
+
+    <div class="result" id="total${r.room}">รวม: 0 บาท</div>
+  `;
+  container.appendChild(div);
+});
+
+function calculate() {
+  let grandTotal = 0;
+
+  rooms.forEach(r => {
+    let ePrev = Number(document.getElementById(`ePrev${r.room}`).value) || 0;
+    let eNow = Number(document.getElementById(`eNow${r.room}`).value) || 0;
+    let electric = Math.max(0, eNow - ePrev) * 8;
+
+    let water = 0;
+
+    if (r.waterType === "unit") {
+      let wPrev = Number(document.getElementById(`wPrev${r.room}`).value) || 0;
+      let wNow = Number(document.getElementById(`wNow${r.room}`).value) || 0;
+      water = Math.max(0, (wNow - wPrev) * 18);
+    } else {
+      water = Number(document.getElementById(`wPrice${r.room}`).value) || 0;
+    }
+
+    let total = r.rent + 20 + electric + water;
+
+    document.getElementById(`total${r.room}`).innerText = "รวม: " + total + " บาท";
+    grandTotal += total;
+  });
+
+  document.getElementById("grandTotal").innerText = grandTotal;
+
+  // ✅ แสดงรายละเอียด
+  document.getElementById("summaryBox").style.display = "block";
+}
+</script>
+
+</body>
+</html>
