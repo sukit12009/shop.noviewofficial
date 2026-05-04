@@ -1,6 +1,6 @@
 # Noview Shop — Project Context
 
-> อัปเดตล่าสุด: 2026-05-05 (cart page + order success page)
+> อัปเดตล่าสุด: 2026-05-05 (cart, order success, toast, skeleton, 404)
 >
 > ไฟล์นี้สรุป context ทั้งหมดของโปรเจค ให้อ่านก่อนเริ่มทำงานทุกครั้ง
 
@@ -213,6 +213,9 @@ Banners และ OfficialGoods ยังใช้ mock repository อยู่ 
 | NEWS pages | ✅ `/news` (listing) + `/news/[id]` (detail) — 8 mock articles, 4 categories |
 | Cart page (`/cart`) | ✅ item list, quantity/remove, subtotal summary, proceed to checkout |
 | Order success page (`/order/[id]`) | ✅ success hero, order detail card (items/pricing/address), not-found state |
+| Toast notifications | ✅ Zustand toast-store + Toaster component — add to cart / wishlist toggle |
+| Skeleton loading states | ✅ ครบทุกหน้า (HeroBanner, CategorySection, CategoryPage, ProductDetail, Search) |
+| Custom 404 page | ✅ `not-found.tsx` — กลับหน้าแรก / ค้นหาสินค้า |
 
 ---
 

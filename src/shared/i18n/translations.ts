@@ -149,6 +149,12 @@ export const translations = {
       noResults: (q: string) => `ไม่พบสินค้าที่ตรงกับ "${q}"`,
       emptyQuery: 'พิมพ์ชื่อสินค้าที่ต้องการค้นหา',
     },
+    // Toast messages
+    toast: {
+      addedToCart: 'เพิ่มในตะกร้าแล้ว!',
+      addedToWishlist: 'เพิ่มในรายการโปรดแล้ว',
+      removedFromWishlist: 'ลบออกจากรายการโปรดแล้ว',
+    },
     // Cart page
     cart: {
       breadcrumbHome: 'หน้าแรก',
@@ -356,6 +362,12 @@ export const translations = {
       showing: (n: number, q: string) => `${n} result${n !== 1 ? 's' : ''} for "${q}"`,
       noResults: (q: string) => `No products found for "${q}"`,
       emptyQuery: 'Type a product name to search',
+    },
+    // Toast messages
+    toast: {
+      addedToCart: 'Added to cart!',
+      addedToWishlist: 'Added to wishlist',
+      removedFromWishlist: 'Removed from wishlist',
     },
     // Cart page
     cart: {

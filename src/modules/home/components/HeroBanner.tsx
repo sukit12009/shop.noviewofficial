@@ -66,7 +66,19 @@ export function HeroBanner({ banners, isLoading = false }: HeroBannerProps) {
 
   if (isLoading || banners.length === 0) {
     return (
-      <section className="relative h-[80vh] w-full animate-pulse bg-gray-200" />
+      <section className="relative h-[80vh] w-full overflow-hidden bg-gray-200">
+        <div className="absolute inset-0 animate-pulse bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 bg-[length:200%_100%]" />
+        <div className="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4">
+          <div className="h-8 w-64 animate-pulse rounded-full bg-gray-300" />
+          <div className="h-5 w-48 animate-pulse rounded-full bg-gray-300" />
+          <div className="mt-2 h-11 w-32 animate-pulse rounded-full bg-gray-300" />
+        </div>
+        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
+          {[0, 1, 2].map((i) => (
+            <div key={i} className={`h-2 animate-pulse rounded-full bg-gray-300 ${i === 0 ? 'w-6' : 'w-2'}`} />
+          ))}
+        </div>
+      </section>
     );
   }
 

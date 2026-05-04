@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useCartStore as useCart } from '../../../shared/store/cart-store';
 import { useWishlist } from '../../../shared/hooks/use-wishlist';
 import { useT } from '../../../shared/hooks/use-t';
+import { useToastStore } from '../../../shared/store/toast-store';
 import type { ProductDetailViewModel } from '../presenters/product-presenter';
 
 interface ProductInfoProps {
@@ -44,11 +45,11 @@ export function ProductInfo({ product }: ProductInfoProps) {
     product.sizes[0] ?? null,
   );
   const [quantity, setQuantity] = useState(1);
-  const [addedToCart, setAddedToCart] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const addItem = useCart((s) => s.addItem);
   const { has, toggle } = useWishlist();
+  const addToast = useToastStore((s) => s.add);
   const t = useT();
 
   const isFav = has(product.id);
@@ -72,8 +73,7 @@ export function ProductInfo({ product }: ProductInfoProps) {
       color: selectedColor ?? undefined,
       size: selectedSize ?? undefined,
     });
-    setAddedToCart(true);
-    setTimeout(() => setAddedToCart(false), 2000);
+    addToast(t.toast.addedToCart);
   }
 
   return (
@@ -181,22 +181,15 @@ export function ProductInfo({ product }: ProductInfoProps) {
       <button
         type="button"
         onClick={handleAddToCart}
-        disabled={product.isSoldOut || addedToCart}
+        disabled={product.isSoldOut}
         className={`flex w-full items-center justify-center gap-2 rounded-xl py-4 text-base font-bold tracking-wide transition ${
           product.isSoldOut
             ? 'cursor-not-allowed bg-gray-300 text-gray-500'
-            : addedToCart
-            ? 'bg-green-500 text-white'
             : 'bg-orange-500 text-white hover:bg-orange-600'
         }`}
       >
         {product.isSoldOut ? (
           t.productDetail.soldOut
-        ) : addedToCart ? (
-          <>
-            <CheckIcon />
-            {t.productDetail.addedToCartSuccess}
-          </>
         ) : (
           <>
             <CartIcon />

@@ -4,6 +4,9 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '../store/auth-store';
 import { useWishlistStore } from '../store/wishlist-store';
+import { useToastStore } from '../store/toast-store';
+import { translations } from '../i18n/translations';
+import { useLangStore } from '../store/lang-store';
 
 const GUEST_ID = 'guest';
 
@@ -27,6 +30,8 @@ export function useWishlist(): UseWishlistResult {
   const map = useWishlistStore((s) => s.map);
   const toggleStore = useWishlistStore((s) => s.toggle);
   const clearStore = useWishlistStore((s) => s.clear);
+  const addToast = useToastStore((s) => s.add);
+  const lang = useLangStore((s) => s.lang);
 
   useEffect(() => { setMounted(true); }, []);
 
@@ -37,7 +42,10 @@ export function useWishlist(): UseWishlistResult {
       router.push('/login');
       return;
     }
+    const wasAdded = !(map[userId] ?? []).includes(productId);
     toggleStore(userId, productId);
+    const t = translations[lang].toast;
+    addToast(wasAdded ? t.addedToWishlist : t.removedFromWishlist, wasAdded ? 'success' : 'error');
   };
 
   return {
