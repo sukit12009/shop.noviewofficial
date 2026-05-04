@@ -1,6 +1,6 @@
 # Noview Shop — Project Context
 
-> อัปเดตล่าสุด: 2026-05-03 (cleanup unused modules)
+> อัปเดตล่าสุด: 2026-05-05 (cart page + order success page)
 >
 > ไฟล์นี้สรุป context ทั้งหมดของโปรเจค ให้อ่านก่อนเริ่มทำงานทุกครั้ง
 
@@ -125,6 +125,12 @@ src/
 │   │   └── presenters/
 │   │       └── product-presenter.ts  # ProductViewModel + ProductDetailViewModel
 │   │
+│   ├── cart/
+│   │   └── components/
+│   │       └── CartPage.tsx  # Cart review: item list, quantity controls, subtotal summary, proceed to checkout
+│   ├── order/
+│   │   └── components/
+│   │       └── OrderSuccessPage.tsx  # Order confirmation: success hero, order card (items/pricing/address), not-found state
 │   └── layout/
 │       └── components/
 │           └── Footer.tsx  # Logo "ketchup", Terms/Contact links, social icons (Twitter/FB/IG), copyright 2023
@@ -205,6 +211,8 @@ Banners และ OfficialGoods ยังใช้ mock repository อยู่ 
 | Search functionality | ✅ `/search?q=` — ค้นหาชื่อสินค้าจากทั้ง products + official-goods |
 | ARTIST pages | ✅ `/artist/[id]` — reuse CategoryPage, dropdown ใน Header |
 | NEWS pages | ✅ `/news` (listing) + `/news/[id]` (detail) — 8 mock articles, 4 categories |
+| Cart page (`/cart`) | ✅ item list, quantity/remove, subtotal summary, proceed to checkout |
+| Order success page (`/order/[id]`) | ✅ success hero, order detail card (items/pricing/address), not-found state |
 
 ---
 
